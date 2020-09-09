@@ -26,9 +26,16 @@ import java.time.format.DateTimeFormatter;
 /**
  *
  * @author DylanYool
+ * @since 7 de septiembre, 2020.
  */
 public class ExcelPlantilla {
 
+    protected HSSFCellStyle Default_tituloStyle;
+    protected HSSFCellStyle Default_subTituloStyle;
+    protected HSSFCellStyle Default_cellStyle;
+    protected HSSFCellStyle Default_encabezadoStyle;
+    protected HSSFCellStyle Default_fechaStyle;
+    protected HSSFCellStyle Default_descripcionStyle;
     private HSSFCellStyle Normi;
     private HSSFCellStyle Normi_BordeSimple;
     private HSSFCellStyle Sombreado_BlueBold18;
@@ -36,40 +43,81 @@ public class ExcelPlantilla {
     private HSSFCellStyle WhiteBackground_Black_B18;
     private HSSFCellStyle WhiteBackground_Blue_B28;
     private HSSFFont Black16;
+    private HSSFFont Black14;
+    private HSSFFont Black12;
     private HSSFFont Blue_B18;
     private HSSFFont Blue_B28;
     private HSSFFont Blue18;
     private HSSFFont White_B16;
     private HSSFFont Black_B18;
-    String ruta;
+    private String ruta;
+    protected String titulo;
+    protected String subTitulo;
+    protected String descripcion;
 
-    protected HSSFWorkbook generarXLSX(String titulo, String subtitulo, String descripcion) {
+    LocalDateTime date = java.time.LocalDateTime.now();
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-M-yyyy hh:mm:ss");
+    private final String fechora = dtf.format(date);
+
+    protected HSSFWorkbook generarXLS(String titulo, String subtitulo, String descripcion) {
         HSSFWorkbook wb = null;
         wb = new HSSFWorkbook();
         InitStyles(wb);
-        CreateSheet(wb, titulo, subtitulo, descripcion);
+        this.titulo = titulo;
+        this.subTitulo = subtitulo;
+        this.descripcion = descripcion;
         return wb;
     }
 
-    public HSSFSheet CreateSheet(HSSFWorkbook wb, String titulo) {
-        return CreateSheet(wb, titulo, "", "");
+    /**
+     * Crea una nueva hoja para el workbook
+     *
+     * @param wb WorkBook
+     * @param titulo titulo de la nueva hoja
+     * @param subTitulo subtitulo para el reporte
+     * @param descripcion descripcion del reporte
+     * @return HSSFSheet sheet
+     *
+     */
+    protected HSSFSheet CreateSheet(HSSFWorkbook wb, String titulo, String subtitulo, String descripcion) {
+        InitStyles(wb);
+        this.titulo = titulo;
+        this.subTitulo = subtitulo;
+        this.descripcion = descripcion;
+        return CreateSheet(wb);
     }
 
-    public HSSFSheet CreateSheet(HSSFWorkbook wb, String titulo, String subtitulo) {
-        return CreateSheet(wb, titulo, subtitulo, "");
-    }
-
-    public HSSFSheet CreateSheet(HSSFWorkbook wb, String titulo, String subtitulo, String descripcion) {
+    /**
+     * Crea una nueva hoja para el workbook
+     *
+     * @param wb WorkBook
+     * @return HSSFSheet sheet
+     */
+    protected HSSFSheet CreateSheet(HSSFWorkbook wb) {
         try {
             HSSFSheet sheet = wb.createSheet(titulo);
+
             HSSFRow row = sheet.createRow(2);
-            HSSFCell cell = row.createCell(6);
-            cell.setCellStyle(getWhiteBackground_Blue_B28());
+            HSSFCell cell = row.createCell(1);
+            cell.setCellStyle(getDefault_tituloStyle());
             cell.setCellValue(titulo);
+
             row = sheet.createRow(3);
-            cell = row.createCell(6);
-            cell.setCellValue(titulo);
-            cell.setCellStyle(getWhiteBackground_Black_B18());
+            cell = row.createCell(1);
+
+            cell.setCellStyle(getDefault_subTituloStyle());
+            cell.setCellValue(subTitulo);
+
+            cell = row.createCell(2);
+            cell.setCellStyle(getDefault_fechaStyle());
+            cell.setCellValue("Fecha: " + this.fechora.replace(" ", "_Hora: ") + "\n");
+
+            row = sheet.createRow(4);
+            cell = row.createCell(2);
+            cell.setCellStyle(getDefault_descripcionStyle());
+            cell.setCellValue(descripcion);
+            sheet.setColumnWidth(2, 12000);
+
             System.out.println("ReporteCreado");
             return sheet;
         } catch (Exception e) {
@@ -85,12 +133,11 @@ public class ExcelPlantilla {
      * @param workbook the workbook.
      * @param PATH Direccion de la carpeta donde se guardará el archivo.
      * @param nombreArchivo nombre que recibirá el archivo.
+     * @return boolean indicando el resultado del la operacion
      */
     protected boolean CrearArchivoXLS(HSSFWorkbook workbook, String PATH, String nombreArchivo) {
         try {
-            LocalDateTime date = java.time.LocalDateTime.now();
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-M-yyyy hh:mm:ss");
-            String fechora = dtf.format(date).replace(":", "-").replace(" ", "_");
+            String fechora = this.fechora.replace(":", "-").replace(" ", "_T");
             ruta = PATH + "\\" + nombreArchivo + "_" + fechora + ".xls";
             File dir = new File(PATH);
             if (!dir.exists()) {
@@ -115,6 +162,8 @@ public class ExcelPlantilla {
 
     /**
      * Abre el archivo establecido en la ruta
+     *
+     * @return boolean indicando el resultado de la operacion
      */
     protected boolean AbrirArchivo() {
         try {
@@ -133,6 +182,14 @@ public class ExcelPlantilla {
         setBlack16(workbook.createFont());
         getBlack16().setFontHeight((short) (16 * 20));
         getBlack16().setColor(HSSFColor.HSSFColorPredefined.BLACK.getIndex());
+
+        setBlack14(workbook.createFont());
+        getBlack14().setFontHeight((short) (14 * 20));
+        getBlack14().setColor(HSSFColor.HSSFColorPredefined.BLACK.getIndex());
+
+        setBlack12(workbook.createFont());
+        getBlack12().setFontHeight((short) (12 * 20));
+        getBlack12().setColor(HSSFColor.HSSFColorPredefined.BLACK.getIndex());
 
         setBlue_B18(workbook.createFont());
         getBlue_B18().setFontHeight((short) (18 * 20));
@@ -189,7 +246,7 @@ public class ExcelPlantilla {
         getSombreado_WhiteBold16().setFont(getWhite_B16());
         getSombreado_WhiteBold16().setFillForegroundColor(HSSFColor.HSSFColorPredefined.GREY_80_PERCENT.getIndex());
         getSombreado_WhiteBold16().setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        getSombreado_WhiteBold16().setAlignment(HorizontalAlignment.CENTER);
+        getSombreado_WhiteBold16().setAlignment(HorizontalAlignment.LEFT);
         getSombreado_WhiteBold16().setBorderBottom(BorderStyle.THIN);
         getSombreado_WhiteBold16().setBorderTop(BorderStyle.THIN);
         getSombreado_WhiteBold16().setBorderRight(BorderStyle.THIN);
@@ -205,7 +262,7 @@ public class ExcelPlantilla {
         getWhiteBackground_Blue_B28().setFont(getBlue_B28());
         getWhiteBackground_Blue_B28().setFillForegroundColor(HSSFColor.HSSFColorPredefined.WHITE.getIndex());
         getWhiteBackground_Blue_B28().setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        getWhiteBackground_Blue_B28().setAlignment(HorizontalAlignment.CENTER);
+        getWhiteBackground_Blue_B28().setAlignment(HorizontalAlignment.LEFT);
 
     }
 
@@ -378,6 +435,118 @@ public class ExcelPlantilla {
      */
     public void setBlack_B18(HSSFFont aBlack_B18) {
         Black_B18 = aBlack_B18;
+    }
+
+    /**
+     * @return the Black14
+     */
+    public HSSFFont getBlack14() {
+        return Black14;
+    }
+
+    /**
+     * @param Black14 the Black14 to set
+     */
+    public void setBlack14(HSSFFont Black14) {
+        this.Black14 = Black14;
+    }
+
+    /**
+     * @return the Black12
+     */
+    public HSSFFont getBlack12() {
+        return Black12;
+    }
+
+    /**
+     * @param Black12 the Black12 to set
+     */
+    public void setBlack12(HSSFFont Black12) {
+        this.Black12 = Black12;
+    }
+
+    /**
+     * @return the Default_tituloStyle
+     */
+    public HSSFCellStyle getDefault_tituloStyle() {
+        return Default_tituloStyle;
+    }
+
+    /**
+     * @param Default_tituloStyle the Default_tituloStyle to set
+     */
+    public void setDefault_tituloStyle(HSSFCellStyle Default_tituloStyle) {
+        this.Default_tituloStyle = Default_tituloStyle;
+    }
+
+    /**
+     * @return the Default_subTituloStyle
+     */
+    public HSSFCellStyle getDefault_subTituloStyle() {
+        return Default_subTituloStyle;
+    }
+
+    /**
+     * @param Default_subTituloStyle the Default_subTituloStyle to set
+     */
+    public void setDefault_subTituloStyle(HSSFCellStyle Default_subTituloStyle) {
+        this.Default_subTituloStyle = Default_subTituloStyle;
+    }
+
+    /**
+     * @return the Default_cellStyle
+     */
+    public HSSFCellStyle getDefault_cellStyle() {
+        return Default_cellStyle;
+    }
+
+    /**
+     * @param Default_cellStyle the Default_cellStyle to set
+     */
+    public void setDefault_cellStyle(HSSFCellStyle Default_cellStyle) {
+        this.Default_cellStyle = Default_cellStyle;
+    }
+
+    /**
+     * @return the Default_encabezadoStyle
+     */
+    public HSSFCellStyle getDefault_encabezadoStyle() {
+        return Default_encabezadoStyle;
+    }
+
+    /**
+     * @param Default_encabezadoStyle the Default_encabezadoStyle to set
+     */
+    public void setDefault_encabezadoStyle(HSSFCellStyle Default_encabezadoStyle) {
+        this.Default_encabezadoStyle = Default_encabezadoStyle;
+    }
+
+    /**
+     * @return the Default_fechaStyle
+     */
+    public HSSFCellStyle getDefault_fechaStyle() {
+        return Default_fechaStyle;
+    }
+
+    /**
+     * @param Default_fechaStyle the Default_fechaStyle to set
+     */
+    public void setDefault_fechaStyle(HSSFCellStyle Default_fechaStyle) {
+        this.Default_fechaStyle = Default_fechaStyle;
+    }
+
+    /**
+     * @return the Default_descripcionStyle
+     */
+    public HSSFCellStyle getDefault_descripcionStyle() {
+        return Default_descripcionStyle;
+    }
+
+    /**
+     * @param Default_descripcionStyle the Default_descripcionStyle to set
+     */
+    public void setDefault_descripcionStyle(HSSFCellStyle Default_descripcionStyle) {
+        this.Default_descripcionStyle = Default_descripcionStyle;
     }
 
 }

@@ -9,7 +9,9 @@ import java.lang.reflect.Field;
 
 /**
  *
- * @author dylanYool
+ * @author DylanYool
+ * @since 7 de septiembre, 2020.
+ * @see java.lang.reflect.Field
  */
 public class Celda {
 
@@ -45,7 +47,10 @@ public class Celda {
     }
 
     /**
-     * @param atributoValue the atributoValue to set
+     *
+     * @param instance instancia del objeto a mapear
+     * @throws IllegalArgumentException Error al leer el atributo
+     * @throws IllegalAccessException Error al acceder al atributo
      */
     public void setAtributoValue(Object instance) throws IllegalArgumentException, IllegalAccessException {
         this.atributoValue = this.atributo.get(instance).toString();

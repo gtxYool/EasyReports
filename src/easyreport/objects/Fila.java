@@ -15,6 +15,11 @@ import java.util.List;
 /**
  *
  * @author DylanYool
+ * @since 7 de septiembre, 2020.
+ * @see easyreport.objects.Celda
+ * @see java.lang.reflect.Field
+ * @see java.util.List
+ * @see java.util.LinkedList
  */
 public class Fila {
 

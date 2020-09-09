@@ -11,6 +11,7 @@ import java.util.List;
 /**
  *
  * @author DylanYool
+ * @since 7 de septiembre, 2020.
  */
 public class TableReport {
 
@@ -22,9 +23,10 @@ public class TableReport {
     //----------------------------- METODOS -----------------------------------//
     //------------------------------CONTRUCTORES------------------------------//
     /**
+     * Crea un objeto TableReport
      *
-     * @param objetos
-     * @param titulo
+     * @param objetos listado de objetos a reportar.
+     * @param titulo titulo que se mostrará al inicio del reporte.
      *
      */
     public TableReport(List objetos, String titulo) {
@@ -35,10 +37,13 @@ public class TableReport {
     }
 
     /**
+     * Crea un objeto TableReport
      *
-     * @param encabezado
-     * @param objetos
-     * @param titulo
+     * @param encabezado listado de nombres a mostrar en las columnas (si el
+     * objeto no tiene un atributo con ese nombre se quedará vacia la celda al
+     * momento de llenar la tabla.)
+     * @param objetos listado de objetos a reportar.
+     * @param titulo titulo que se mostrará al inicio del reporte.
      *
      */
     public TableReport(String[] encabezado, List objetos, String titulo) {
@@ -50,9 +55,13 @@ public class TableReport {
 
     /**
      *
-     * @param encabezado
-     * @param objetos
-     * @param titulo
+     * Crea un objeto TableReport
+     *
+     * @param encabezado listado de nombres a mostrar en las columnas (si el
+     * objeto no tiene un atributo con ese nombre se quedará vacia la celda al
+     * momento de llenar la tabla.)
+     * @param objetos listado de objetos a reportar.
+     * @param titulo titulo que se mostrará al inicio del reporte.
      *
      */
     public TableReport(List<String> encabezado, List objetos, String titulo) {
@@ -64,10 +73,14 @@ public class TableReport {
 
     /**
      *
-     * @param encabezado
-     * @param atributos
-     * @param objetos
-     * @param titulo
+     * Crea un objeto TableReport
+     *
+     * @param encabezado listado de nombres a mostrar en las columnas.
+     * @param atributos listado de atributos asociados a dichas columnas(si el
+     * objeto no cuenta con atributo con dicho nombre quedará vacia la celda al
+     * momento de llenar la tabla)
+     * @param objetos listado de objetos a reportar.
+     * @param titulo titulo que se mostrará al inicio del reporte.
      *
      */
     public TableReport(String[] encabezado, String[] atributos, List objetos, String titulo) {
@@ -79,10 +92,14 @@ public class TableReport {
 
     /**
      *
-     * @param encabezado
-     * @param atributos
-     * @param objetos
-     * @param titulo
+     * Crea un objeto TableReport
+     *
+     * @param encabezado listado de nombres a mostrar en las columnas.
+     * @param atributos listado de atributos asociados a dichas columnas(si el
+     * objeto no cuenta con atributo con dicho nombre quedará vacia la celda al
+     * momento de llenar la tabla)
+     * @param objetos listado de objetos a reportar.
+     * @param titulo titulo que se mostrará al inicio del reporte.
      *
      */
     public TableReport(List<String> encabezado, List<String> atributos, List objetos, String titulo) {
@@ -94,12 +111,13 @@ public class TableReport {
     }
 
     /**
+     * Crea un objeto TableReport
      *
-     * @param objetos
-     * @param titulo
-     * @param subTitulo
+     * @param objetos listado de objetos a reportar.
+     * @param titulo titulo que se mostrará al inicio del reporte.
+     * @param subTitulo subtitulo del reporte
      *
-     * @param Descripcion
+     * @param Descripcion Descripción del reporte
      */
     public TableReport(List objetos, String titulo, String subTitulo, String Descripcion) {
         this.tabla = new Tabla(objetos);
@@ -110,12 +128,14 @@ public class TableReport {
     }
 
     /**
-     * @param encabezado
-     * @param objetos
-     * @param titulo
-     * @param subTitulo
+     * Crea un objeto TableReport
      *
-     * @param Descripcion
+     * @param encabezado listado de nombres a mostrar en las columnas.
+     * @param objetos listado de objetos a reportar.
+     * @param titulo titulo que se mostrará al inicio del reporte.
+     * @param subTitulo subtitulo del reporte
+     *
+     * @param Descripcion Descripción del reporte
      */
     public TableReport(String[] encabezado, List objetos, String titulo, String subTitulo, String Descripcion) {
         this.tabla = new Tabla(encabezado, objetos);
@@ -126,13 +146,14 @@ public class TableReport {
     }
 
     /**
+     * Crea un objeto TableReport
      *
-     * @param encabezado
-     * @param objetos
-     * @param titulo
-     * @param subTitulo
+     * @param encabezado listado de nombres a mostrar en las columnas.
+     * @param objetos listado de objetos a reportar.
+     * @param titulo titulo que se mostrará al inicio del reporte.
+     * @param subTitulo subtitulo del reporte
      *
-     * @param Descripcion
+     * @param Descripcion Descripción del reporte
      */
     public TableReport(List<String> encabezado, List objetos, String titulo, String subTitulo, String Descripcion) {
         this.tabla = new Tabla(encabezado, objetos);
@@ -143,32 +164,38 @@ public class TableReport {
     }
 
     /**
+     * Crea un objeto TableReport
      *
-     * @param encabezado
-     * @param atributos
-     * @param objetos
-     * @param titulo
-     * @param subTitulo
+     * @param encabezado listado de nombres a mostrar en las columnas.
+     * @param atributos listado de atributos asociados a dichas columnas(si el
+     * objeto no cuenta con atributo con dicho nombre quedará vacia la celda al
+     * momento de llenar la tabla)
+     * @param objetos listado de objetos a reportar.
+     * @param titulo titulo que se mostrará al inicio del reporte.
+     * @param subTitulo subtitulo del reporte
      *
-     * @param Descripcion
+     * @param Descripcion Descripción del reporte
      */
     public TableReport(String[] encabezado, String[] atributos, List objetos, String titulo, String subTitulo, String Descripcion) {
         this.tabla = new Tabla(encabezado, atributos, objetos);
         this.titulo = titulo;
         this.subTitulo = subTitulo;
-
         this.Descripcion = Descripcion;
     }
 
     /**
      *
-     * @param encabezado
-     * @param atributos
-     * @param objetos
-     * @param titulo
-     * @param subTitulo
+     * Crea un objeto TableReport
      *
-     * @param Descripcion
+     * @param encabezado listado de nombres a mostrar en las columnas.
+     * @param atributos listado de atributos asociados a dichas columnas(si el
+     * objeto no cuenta con atributo con dicho nombre quedará vacia la celda al
+     * momento de llenar la tabla)
+     * @param objetos listado de objetos a reportar.
+     * @param titulo titulo que se mostrará al inicio del reporte.
+     * @param subTitulo subtitulo del reporte
+     *
+     * @param Descripcion Descripción del reporte
      */
     public TableReport(List<String> encabezado, List<String> atributos, List objetos, String titulo, String subTitulo, String Descripcion) {
         this.tabla = new Tabla(encabezado, atributos, objetos);
@@ -179,11 +206,15 @@ public class TableReport {
     }
 
     /**
-     * @param encabezado
-     * @param objetos
-     * @param titulo
+     * Crea un objeto TableReport
      *
-     * @param Descripcion
+     * @param encabezado listado de nombres a mostrar en las columnas(si el
+     * objeto no cuenta con atributo con dicho nombre quedará vacia la celda al
+     * momento de llenar la tabla).
+     * @param objetos listado de objetos a reportar.
+     * @param titulo titulo que se mostrará al inicio del reporte.
+     *
+     * @param Descripcion Descripción del reporte
      */
     public TableReport(String[] encabezado, List objetos, String titulo, String Descripcion) {
         this.tabla = new Tabla(encabezado, objetos);
@@ -194,12 +225,15 @@ public class TableReport {
     }
 
     /**
+     * Crea un objeto TableReport
      *
-     * @param encabezado
-     * @param objetos
-     * @param titulo
+     * @param encabezado listado de nombres a mostrar en las columnas(si el
+     * objeto no cuenta con atributo con dicho nombre quedará vacia la celda al
+     * momento de llenar la tabla).
+     * @param objetos listado de objetos a reportar.
+     * @param titulo titulo que se mostrará al inicio del reporte.
      *
-     * @param Descripcion
+     * @param Descripcion Descripción del reporte
      */
     public TableReport(List<String> encabezado, List objetos, String titulo, String Descripcion) {
         this.tabla = new Tabla(encabezado, objetos);
@@ -211,12 +245,16 @@ public class TableReport {
 
     /**
      *
-     * @param encabezado
-     * @param atributos
-     * @param objetos
-     * @param titulo
+     * Crea un objeto TableReport
      *
-     * @param Descripcion
+     * @param encabezado listado de nombres a mostrar en las columnas.
+     * @param atributos listado de atributos asociados a dichas columnas(si el
+     * objeto no cuenta con atributo con dicho nombre quedará vacia la celda al
+     * momento de llenar la tabla)
+     * @param objetos listado de objetos a reportar.
+     * @param titulo titulo que se mostrará al inicio del reporte.
+     *
+     * @param Descripcion Descripción del reporte
      */
     public TableReport(String[] encabezado, String[] atributos, List objetos, String titulo, String Descripcion) {
         this.tabla = new Tabla(encabezado, atributos, objetos);
@@ -228,12 +266,16 @@ public class TableReport {
 
     /**
      *
-     * @param encabezado
-     * @param atributos
-     * @param objetos
-     * @param titulo
+     * Crea un objeto TableReport
      *
-     * @param Descripcion
+     * @param encabezado listado de nombres a mostrar en las columnas.
+     * @param atributos listado de atributos asociados a dichas columnas(si el
+     * objeto no cuenta con atributo con dicho nombre quedará vacia la celda al
+     * momento de llenar la tabla)
+     * @param objetos listado de objetos a reportar.
+     * @param titulo titulo que se mostrará al inicio del reporte.
+     *
+     * @param Descripcion Descripción del reporte
      */
     public TableReport(List<String> encabezado, List<String> atributos, List objetos, String titulo, String Descripcion) {
         this.tabla = new Tabla(encabezado, atributos, objetos);

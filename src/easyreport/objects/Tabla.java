@@ -13,7 +13,11 @@ import java.util.List;
 
 /**
  *
- * @author dylanYool
+ * @author DylanYool
+ * @since 7 de septiembre, 2020.
+ * @see java.lang.reflect.Field
+ * @see java.util.List
+ * @see java.util.LinkedList
  */
 public class Tabla {
 

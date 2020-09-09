@@ -6,8 +6,9 @@
 package easyreport.objects;
 
 /**
- * @autor dylanYool
- * @since 3 sept, 2020
+ *
+ * @author DylanYool
+ * @since 7 de septiembre, 2020.
  */
 public class EncabezadoColumna {
 
