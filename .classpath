@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="dist/EasyReport.jar"/>
+	<classpathentry kind="lib" path="dist/lib/itextpdf-5.5.13.jar"/>
+	<classpathentry kind="lib" path="dist/lib/json-20180813.jar"/>
+	<classpathentry kind="lib" path="dist/lib/poi-4.1.2.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>

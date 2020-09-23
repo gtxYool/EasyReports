@@ -39,6 +39,19 @@ public class TableReport {
     /**
      * Crea un objeto TableReport
      *
+     * @param JsonObjects json de objetos a reportar.
+     * @param titulo titulo que se mostrará al inicio del reporte.
+     *
+     */
+//    public TableReport(String JsonObjects, String titulo) {
+//        this.tabla = new Tabla(JsonObjects);
+//        this.titulo = titulo;
+//        this.subTitulo = "";
+//        this.Descripcion = "";
+//    }
+    /**
+     * Crea un objeto TableReport
+     *
      * @param encabezado listado de nombres a mostrar en las columnas (si el
      * objeto no tiene un atributo con ese nombre se quedará vacia la celda al
      * momento de llenar la tabla.)
@@ -85,6 +98,25 @@ public class TableReport {
      */
     public TableReport(String[] encabezado, String[] atributos, List objetos, String titulo) {
         this.tabla = new Tabla(encabezado, atributos, objetos);
+        this.titulo = titulo;
+        this.subTitulo = "";
+        this.Descripcion = "";
+    }
+
+    /**
+     *
+     * Crea un objeto TableReport
+     *
+     * @param encabezado listado de nombres a mostrar en las columnas.
+     * @param atributos listado de atributos asociados a dichas columnas(si el
+     * objeto no cuenta con atributo con dicho nombre quedará vacia la celda al
+     * momento de llenar la tabla)
+     * @param objetos listado de objetos a reportar.
+     * @param titulo titulo que se mostrará al inicio del reporte.
+     *
+     */
+    public TableReport(String[] encabezado, String[] atributos, String JsonObjects, String titulo) {
+        this.tabla = new Tabla(encabezado, atributos, JsonObjects);
         this.titulo = titulo;
         this.subTitulo = "";
         this.Descripcion = "";
@@ -178,6 +210,26 @@ public class TableReport {
      */
     public TableReport(String[] encabezado, String[] atributos, List objetos, String titulo, String subTitulo, String Descripcion) {
         this.tabla = new Tabla(encabezado, atributos, objetos);
+        this.titulo = titulo;
+        this.subTitulo = subTitulo;
+        this.Descripcion = Descripcion;
+    }
+
+    /**
+     * Crea un objeto TableReport
+     *
+     * @param encabezado listado de nombres a mostrar en las columnas.
+     * @param atributos listado de atributos asociados a dichas columnas(si el
+     * objeto no cuenta con atributo con dicho nombre quedará vacia la celda al
+     * momento de llenar la tabla)
+     * @param JsonObject JSON con los objetos a reportar.
+     * @param titulo titulo que se mostrará al inicio del reporte.
+     * @param subTitulo subtitulo del reporte
+     *
+     * @param Descripcion Descripción del reporte
+     */
+    public TableReport(String[] encabezado, String[] atributos, String JsonObject, String titulo, String subTitulo, String Descripcion) {
+        this.tabla = new Tabla(encabezado, atributos, JsonObject);
         this.titulo = titulo;
         this.subTitulo = subTitulo;
         this.Descripcion = Descripcion;

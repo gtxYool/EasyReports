@@ -10,6 +10,8 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.lang.reflect.Field;
 import java.util.LinkedList;
+import org.json.JSONObject;
+import org.json.JSONArray;
 import java.util.List;
 
 /**
@@ -32,6 +34,28 @@ public class Fila {
         atributos = object.getClass().getDeclaredFields();
         generarCeldas(object);
         altura = 0;
+    }
+
+    public Fila(JSONObject object) {
+        celdas = new LinkedList<Celda>();
+        generarCeldas(object);
+        altura = 0;
+    }
+
+    private void generarCeldas(JSONObject object) {
+        JSONArray jsonArray = object.names();
+        int length = jsonArray.length();
+        try {
+            for (int i = 0; i < length; i++) {
+                String name = jsonArray.getString(i);
+                String value = object.getString(name);
+                Celda nuevaCelda = new Celda(name, value);
+                celdas.add(nuevaCelda);
+            }
+        } catch (Exception e) {
+            System.err.println("algo salio mal generando las celdas desde el Json... err: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void generarCeldas(Object instancia) {

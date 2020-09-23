@@ -7,18 +7,18 @@ package easyreport.excel;
 
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.ss.usermodel.CellStyle;
 import easyreport.objects.EncabezadoColumna;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Row;
 import easyreport.excel.ExcelPlantilla;
 import easyreport.objects.Fila;
 import easyreport.TableReport;
 import java.util.LinkedList;
 import java.util.List;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 
 /**
  * Clase encargada de crear una tabla en Excel .xls desde un objeto de tipo
@@ -70,32 +70,32 @@ public class Table_ExcelReport extends ExcelPlantilla {
      * @see easyreport.TableReport
      */
     private boolean DrawTable(TableReport report) {
-        int numInicio = 7;
+        int numInicio = 10;
         try {
             String titulo = report.getTitulo();
             String subTitulo = report.getSubTitulo();
             String descripcion = report.getDescripcion();
-            CreateSheet(workbook, titulo, subTitulo, descripcion);
-            HSSFSheet sheet = workbook.getSheet(report.getTitulo());
-            HSSFRow r = sheet.createRow(numInicio++);
-            CellStyle cs = workbook.createCellStyle();
-            cs.setWrapText(true);
-            cs.setAlignment(HorizontalAlignment.LEFT);
-            cs.setVerticalAlignment(VerticalAlignment.CENTER);
-
-            HSSFCell c = r.createCell(3);
-            c.setCellStyle(getSombreado_BlueBold18());
-            c.setCellValue(" # ");
-
-            List<EncabezadoColumna> columnas = report.getTabla().getEncabezados();
-            for (int i = 1; i <= columnas.size(); i++) {
-                HSSFCell cell = r.createCell(i + 3);
-                cell.setCellStyle(getSombreado_BlueBold18());
-                cell.setCellValue(columnas.get(i - 1).getNombre());
+            Sheet sheet = CreateSheet(workbook, titulo, subTitulo, descripcion);
+            System.out.println("llevo " + workbook.getNumberOfSheets());
+            if (sheet != null) {
+                Row r = sheet.createRow(numInicio++);
+                CellStyle cs = workbook.createCellStyle();
+                cs.setWrapText(true);
+                cs.setAlignment(HorizontalAlignment.LEFT);
+                cs.setVerticalAlignment(VerticalAlignment.CENTER);
+                ExcelUtils.nuevaCelda(r, 0, " # ", sheet, tituloE);
+                List<EncabezadoColumna> columnas = report.getTabla().getEncabezados();
+                for (int i = 1; i <= columnas.size(); i++) {
+                    ExcelUtils.nuevaCelda(r, i, columnas.get(i - 1).getNombre(), sheet, tituloE);
+                }
+                return true;
+            } else {
+                System.err.println("Algo salió mal creando la hoja...\n usted confio en mi, confio en mi y yo le falle :\"(");
+                return false;
             }
-            return true;
+
         } catch (Exception e) {
-            System.err.println("Algo salió mal dibujando la tabla... err: " + e.getMessage());
+            System.err.println("Algo salió mal dibujando la tabla...\n usted confio en mi, confio en mi y yo le falle :\"( \n err: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -122,22 +122,19 @@ public class Table_ExcelReport extends ExcelPlantilla {
      * correctamente.
      */
     private boolean fillSheets() {
+        int cont = 0;
         try {
             for (TableReport reporte : sheets) {
-                HSSFSheet hoja = workbook.getSheet(reporte.getTitulo());
-                int rowIni = 8;
-                int colIni = 4;
+                HSSFSheet hoja = workbook.getSheetAt(cont);
+                int rowIni = 11;
+                int colIni = 1;
                 int rowCount = 0;
                 for (Fila fila : reporte.getTabla().getFilas()) {
                     int colCount = 0;
-                    HSSFRow row = hoja.createRow(rowIni + rowCount);
-                    HSSFCell celda = row.createCell(3);
-                    celda.setCellStyle(getSombreado_WhiteBold16());
-                    celda.setCellValue(rowCount + 1);
+                    Row row = hoja.createRow(rowIni + rowCount);
+                    ExcelUtils.nuevaCelda(row, 0, rowCount + 1, hoja, datCli);
                     for (EncabezadoColumna columna : reporte.getTabla().getEncabezados()) {
-                        celda = row.createCell(colIni + colCount);
-                        celda.setCellStyle(getNormi_BordeSimple());
-                        celda.setCellValue(fila.findValue(columna.getAtributoName()));
+                        ExcelUtils.nuevaCelda(row, colIni + colCount, fila.findValue(columna.getAtributoName()), hoja, tablad);
                         colCount++;
                     }
                     rowCount++;
@@ -147,6 +144,7 @@ public class Table_ExcelReport extends ExcelPlantilla {
                 for (int i = 0; i <= numCol; i++) {
                     hoja.autoSizeColumn(colIni + i);
                 }
+                cont++;
             }
             return true;
         } catch (Exception e) {

@@ -6,22 +6,36 @@
 package easyreport.excel;
 
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.hssf.usermodel.HSSFPalette;
+import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.Picture;
+import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.hssf.util.HSSFColor;
+import java.time.format.DateTimeFormatter;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Font;
 import java.io.FileNotFoundException;
+import org.apache.poi.util.IOUtils;
+import easyreport.excel.ExcelUtils;
 import java.io.FileOutputStream;
+import java.io.FileInputStream;
 import java.time.LocalDateTime;
+import java.io.InputStream;
 import java.io.IOException;
 import java.awt.Desktop;
 import java.io.File;
-import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -42,6 +56,15 @@ public class ExcelPlantilla {
     private HSSFCellStyle Sombreado_WhiteBold16;
     private HSSFCellStyle WhiteBackground_Black_B18;
     private HSSFCellStyle WhiteBackground_Blue_B28;
+    CellStyle encabe;//Nombre TEASA
+    CellStyle datCli;//Datos del cliente
+    CellStyle tablad;//Datos en la tabla
+    CellStyle datBanco;
+    CellStyle fechas;//Fechas en la tabla
+
+    CellStyle tituloE;//encabezado tabla
+    CellStyle tituloStyle;//titulo "datos bancarios"
+    CellStyle totales;//totales de la tabla
     private HSSFFont Black16;
     private HSSFFont Black14;
     private HSSFFont Black12;
@@ -57,7 +80,7 @@ public class ExcelPlantilla {
 
     LocalDateTime date = java.time.LocalDateTime.now();
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-M-yyyy hh:mm:ss");
-    private final String fechora = dtf.format(date);
+    private final String fechora = dtf.format(date).toString().trim();
 
     protected HSSFWorkbook generarXLS(String titulo, String subtitulo, String descripcion) {
         HSSFWorkbook wb = null;
@@ -79,7 +102,7 @@ public class ExcelPlantilla {
      * @return HSSFSheet sheet
      *
      */
-    protected HSSFSheet CreateSheet(HSSFWorkbook wb, String titulo, String subtitulo, String descripcion) {
+    protected Sheet CreateSheet(HSSFWorkbook wb, String titulo, String subtitulo, String descripcion) {
         InitStyles(wb);
         this.titulo = titulo;
         this.subTitulo = subtitulo;
@@ -93,31 +116,38 @@ public class ExcelPlantilla {
      * @param wb WorkBook
      * @return HSSFSheet sheet
      */
-    protected HSSFSheet CreateSheet(HSSFWorkbook wb) {
+    protected Sheet CreateSheet(HSSFWorkbook wb) {
         try {
             HSSFSheet sheet = wb.createSheet(titulo);
+            sheet.setDisplayGridlines(false);
+//            HSSFRow row = sheet.createRow(1);
+//            HSSFCell cell = row.createCell(1);
+            ExcelUtils.nuevaCelda(0, 0, "Transporte, Empaque y Almacenaje, S.A.", sheet, encabe);
+            ExcelUtils.CombinarCentrar(0, 1, 0, 10, sheet, true);
+//            cell.setCellStyle(getDefault_tituloStyle());
+//            cell.setCellValue(titulo);
 
-            HSSFRow row = sheet.createRow(2);
-            HSSFCell cell = row.createCell(1);
-            cell.setCellStyle(getDefault_tituloStyle());
-            cell.setCellValue(titulo);
+//            row = sheet.createRow(2);
+//            cell = row.createCell(1);
+            ExcelUtils.nuevaCelda(2, 1, titulo, sheet, tituloStyle);
+            ExcelUtils.CombinarCentrar(2, 2, 1, 4, sheet, true);
+            ExcelUtils.nuevaCelda(3, 1, subTitulo, sheet, datCli);
+            ExcelUtils.CombinarCentrar(3, 3, 1, 4, sheet, true);
+            ExcelUtils.nuevaCelda(5, 1, "Fecha: " + this.fechora.replace(" ", "_Hora: "), sheet, datCli);
+            ExcelUtils.CombinarCentrar(5, 5, 1, 4, sheet, true);
+            getDefault_descripcionStyle().setWrapText(true);
+            getDefault_descripcionStyle().setVerticalAlignment(VerticalAlignment.TOP);
+            ExcelUtils.nuevaCelda(6, 1, descripcion, sheet, getDefault_descripcionStyle());
+            ExcelUtils.CombinarCentrar(6, 8, 1, 4, sheet, true);
+//            cell.setCellStyle(getDefault_subTituloStyle());
+//            cell.setCellValue(subTitulo);
 
-            row = sheet.createRow(3);
-            cell = row.createCell(1);
-
-            cell.setCellStyle(getDefault_subTituloStyle());
-            cell.setCellValue(subTitulo);
-
-            cell = row.createCell(2);
-            cell.setCellStyle(getDefault_fechaStyle());
-            cell.setCellValue("Fecha: " + this.fechora.replace(" ", "_Hora: ") + "\n");
-
-            row = sheet.createRow(4);
-            cell = row.createCell(2);
-            cell.setCellStyle(getDefault_descripcionStyle());
-            cell.setCellValue(descripcion);
-            sheet.setColumnWidth(2, 12000);
-
+//            sheet.setColumnWidth(1, 12000);
+//            sheet.addMergedRegion(new CellRangeAddress(1, 1, 1, 5));
+//            sheet.addMergedRegion(new CellRangeAddress(2, 2, 1, 2));
+//            sheet.addMergedRegion(new CellRangeAddress(2, 2, 3, 5));
+//            sheet.addMergedRegion(new CellRangeAddress(3, 4, 1, 5));
+            addImage(wb, sheet);
             System.out.println("ReporteCreado");
             return sheet;
         } catch (Exception e) {
@@ -178,6 +208,28 @@ public class ExcelPlantilla {
 
     }
 
+    private void addImage(HSSFWorkbook workbook, Sheet sheet) {
+        try {
+            InputStream input = new FileInputStream("src/com/guatex/proyectobase/imagenes/Guatex2.jpg");
+            byte[] imageInByte = IOUtils.toByteArray(input);
+            int pictureIdx = workbook.addPicture(imageInByte, Workbook.PICTURE_TYPE_PNG);
+            input.close();
+
+            CreationHelper helper = workbook.getCreationHelper();
+            Drawing drawing = sheet.createDrawingPatriarch();
+            ClientAnchor anchor = helper.createClientAnchor();
+            anchor.setCol1(5);
+            anchor.setCol2(8);
+            anchor.setRow1(3);
+            anchor.setRow2(7);
+
+            Picture pict = drawing.createPicture(anchor, pictureIdx);
+            pict.resize(0.9, 1.6);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private void InitFonts(HSSFWorkbook workbook) { // metodo que inician las fuentes
         setBlack16(workbook.createFont());
         getBlack16().setFontHeight((short) (16 * 20));
@@ -223,7 +275,7 @@ public class ExcelPlantilla {
         setNormi(workbook.createCellStyle());
         getNormi().setFont(getBlack16());
         getNormi().setAlignment(HorizontalAlignment.CENTER);
-
+        getNormi().setVerticalAlignment(VerticalAlignment.BOTTOM);
         setNormi_BordeSimple(workbook.createCellStyle());
         getNormi_BordeSimple().setFont(getBlack16());
         getNormi_BordeSimple().setAlignment(HorizontalAlignment.CENTER);
@@ -263,7 +315,88 @@ public class ExcelPlantilla {
         getWhiteBackground_Blue_B28().setFillForegroundColor(HSSFColor.HSSFColorPredefined.WHITE.getIndex());
         getWhiteBackground_Blue_B28().setFillPattern(FillPatternType.SOLID_FOREGROUND);
         getWhiteBackground_Blue_B28().setAlignment(HorizontalAlignment.LEFT);
+        getWhiteBackground_Blue_B28().setIndention((short) 3);
 
+        encabe = workbook.createCellStyle();//Nombre TEASA
+        datCli = workbook.createCellStyle();//Datos del cliente
+        tablad = workbook.createCellStyle();//Datos en la tabla
+        datBanco = workbook.createCellStyle();
+        fechas = workbook.createCellStyle();//Fechas en la tabla
+
+        tituloE = workbook.createCellStyle();//encabezado tabla
+        tituloStyle = workbook.createCellStyle();//titulo "datos bancarios"
+        totales = workbook.createCellStyle();//totales de la tabla
+
+        HSSFPalette paleta = workbook.getCustomPalette();
+        paleta.setColorAtIndex(IndexedColors.PINK.index, (byte) 128, (byte) 100, (byte) 162);
+        paleta.setColorAtIndex(IndexedColors.AQUA.index, (byte) 31, (byte) 73, (byte) 125);
+        paleta.setColorAtIndex(IndexedColors.BLUE.index, (byte) 79, (byte) 129, (byte) 189);
+        paleta.setColorAtIndex(IndexedColors.CORAL.index, (byte) 192, (byte) 80, (byte) 77);
+
+        Font negrita = workbook.createFont();
+        negrita.setBold(true);
+
+        Font nomGuatex = workbook.createFont();
+        nomGuatex.setFontHeightInPoints((short) 20);
+        nomGuatex.setColor(IndexedColors.PINK.getIndex());
+
+        Font tituCli = workbook.createFont();
+        tituCli.setFontHeightInPoints((short) 11);
+        tituCli.setColor(IndexedColors.AQUA.getIndex());
+
+        Font datBan = workbook.createFont();
+        datBan.setFontHeightInPoints((short) 12);
+        datBan.setColor(IndexedColors.BLUE.getIndex());
+
+        Font titdatBan = workbook.createFont();
+        titdatBan.setFontHeightInPoints((short) 18);
+        titdatBan.setColor(IndexedColors.BLUE.getIndex());
+
+        Font tabla = workbook.createFont();
+        tabla.setFontHeightInPoints((short) 10);
+        tabla.setColor(IndexedColors.BLUE.getIndex());
+
+        Font encTabla = workbook.createFont();
+        encTabla.setFontHeightInPoints((short) 10);
+        encTabla.setBold(true);
+        encTabla.setColor(IndexedColors.WHITE.getIndex());
+
+        encabe.setAlignment(HorizontalAlignment.CENTER);//Nombre de la empresa
+        encabe.setFont(nomGuatex);
+
+        //Titulo: Datos Bancarios
+        tituloStyle.setAlignment(HorizontalAlignment.CENTER);
+        tituloStyle.setFont(titdatBan);
+        datBanco.setAlignment(HorizontalAlignment.CENTER);
+        datBanco.setFont(datBan);
+
+        //Encabezados de tabla
+        tituloE.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+        tituloE.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        tituloE.setAlignment(HorizontalAlignment.CENTER);
+        tituloE.setBottomBorderColor(IndexedColors.CORAL.getIndex());
+        tituloE.setTopBorderColor(IndexedColors.CORAL.getIndex());
+        tituloE.setBorderBottom(BorderStyle.MEDIUM);//
+        tituloE.setBorderTop(BorderStyle.MEDIUM);
+        tituloE.setVerticalAlignment(VerticalAlignment.CENTER);
+        tituloE.setFont(encTabla);
+
+        //Totales de tabla
+        HSSFDataFormat df = workbook.createDataFormat();
+        totales.setDataFormat(df.getFormat("#,##0.00"));
+        totales.setAlignment(HorizontalAlignment.RIGHT);
+
+        fechas.setAlignment(HorizontalAlignment.RIGHT);
+        fechas.setFont(tabla);
+        short form = workbook.createDataFormat().getFormat("dd-mmm-yy");
+        fechas.setDataFormat(form);
+
+        datCli.setAlignment(HorizontalAlignment.LEFT);//Datos del cliente
+        datCli.setFont(tituCli);
+
+        tablad.setDataFormat(df.getFormat("#,##0.00"));
+        tablad.setAlignment(HorizontalAlignment.RIGHT);
+        tablad.setFont(tabla);
     }
 
 //-------------------GETTERS AND SETTERS---------------------------------------------//

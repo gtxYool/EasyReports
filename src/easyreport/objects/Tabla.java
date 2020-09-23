@@ -9,6 +9,8 @@ import easyreport.objects.EncabezadoColumna;
 import easyreport.objects.Fila;
 import java.lang.reflect.Field;
 import java.util.LinkedList;
+import org.json.JSONObject;
+import org.json.JSONArray;
 import java.util.List;
 
 /**
@@ -37,6 +39,11 @@ public class Tabla {
     public Tabla(String[] Cabeceras, String[] NombresDeAtributo, List<Object> objetos) {
         this.encabezados = generarEncabezados(Cabeceras, NombresDeAtributo);
         this.filas = generarFilas(objetos);
+    }
+
+    public Tabla(String[] Cabeceras, String[] NombresDeAtributo, String JSONObjects) {
+        this.encabezados = generarEncabezados(Cabeceras, NombresDeAtributo);
+        this.filas = generarFilas(JSONObjects.trim());
     }
 
     public Tabla(List<String> Cabeceras, List<String> NombresDeAtributo, List<Object> objetos) {
@@ -110,6 +117,16 @@ public class Tabla {
         List<Fila> filas = new LinkedList<Fila>();
         for (Object obj : objetos) {
             filas.add(new Fila(obj));
+        }
+        return filas.size() > 0 ? filas : null;
+    }
+
+    private List<Fila> generarFilas(String jsonObject) {
+        List<Fila> filas = new LinkedList<Fila>();
+        JSONArray jsonarray = new JSONArray(jsonObject);
+        for (int i = 0; i < jsonarray.length(); i++) {
+            JSONObject jsonobject = jsonarray.getJSONObject(i);
+            filas.add(new Fila(jsonobject));
         }
         return filas.size() > 0 ? filas : null;
     }

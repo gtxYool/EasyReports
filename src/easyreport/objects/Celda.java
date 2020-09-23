@@ -25,6 +25,11 @@ public class Celda {
         this.atributo.setAccessible(true);
     }
 
+    public Celda(String name, String value) {
+        this.atributoName = name;
+        this.atributoValue = value;
+    }
+
     /**
      * @return the atributoName
      */
