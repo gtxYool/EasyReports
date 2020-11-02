@@ -14,6 +14,7 @@ public class EncabezadoColumna {
 
     private String Nombre;
     private String atributoName;
+    private boolean sumar = false;
     private int ancho;
     private int altura;
 
@@ -57,6 +58,20 @@ public class EncabezadoColumna {
      */
     public void setNombre(String Nombre) {
         this.Nombre = Nombre;
+    }
+
+    /**
+     * @return the sumar
+     */
+    public boolean isSumar() {
+        return sumar;
+    }
+
+    /**
+     * @param sumar the sumar to set
+     */
+    public void setSumar(boolean sumar) {
+        this.sumar = sumar;
     }
 
     /**

@@ -6,8 +6,10 @@
 package easyreport.objects;
 
 import easyreport.objects.EncabezadoColumna;
+import easyreport.objects.Operation;
 import easyreport.objects.Fila;
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.LinkedList;
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -25,6 +27,7 @@ public class Tabla {
 
     private List<EncabezadoColumna> encabezados;
     private List<Fila> filas;
+    private Operation operaciones;
 
     public Tabla(String[] Cabeceras, List<Object> objetos) {
         this.encabezados = generarEncabezados(Cabeceras);
@@ -54,6 +57,27 @@ public class Tabla {
     public Tabla(List<Object> objetos) {
         this.encabezados = generarEncabezadosO(objetos);
         this.filas = generarFilas(objetos);
+    }
+
+    public void addOperation(String campos) {
+        setOperaciones(new Operation(campos.split(",")));
+        for (String st : getOperaciones().getCampos()) {
+            for (EncabezadoColumna ec : getEncabezados()) {
+                if (ec.getAtributoName().equalsIgnoreCase(st)) {
+                    ec.setSumar(true);
+                    System.out.println(ec.getAtributoName() + " set suma true");
+                }
+            }
+        }
+    }
+
+    public String SearchColumnName(String atributoName) {
+        for (EncabezadoColumna ec : encabezados) {
+            if (ec.getAtributoName().equalsIgnoreCase(atributoName)) {
+                return ec.getNombre();
+            }
+        }
+        return "";
     }
 
     private List<EncabezadoColumna> generarEncabezados(String[] encabezados) {
@@ -157,6 +181,20 @@ public class Tabla {
      */
     public void setFilas(List<Fila> filas) {
         this.filas = filas;
+    }
+
+    /**
+     * @return the operaciones
+     */
+    public Operation getOperaciones() {
+        return operaciones;
+    }
+
+    /**
+     * @param operaciones the operaciones to set
+     */
+    public void setOperaciones(Operation operaciones) {
+        this.operaciones = operaciones;
     }
 
 }

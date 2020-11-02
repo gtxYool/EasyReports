@@ -17,6 +17,7 @@ import org.apache.poi.ss.usermodel.Row;
 import easyreport.excel.ExcelPlantilla;
 import easyreport.objects.Fila;
 import easyreport.TableReport;
+import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -84,7 +85,7 @@ public class Table_ExcelReport extends ExcelPlantilla {
                 cs.setAlignment(HorizontalAlignment.LEFT);
                 cs.setVerticalAlignment(VerticalAlignment.CENTER);
                 ExcelUtils.nuevaCelda(r, 0, " # ", sheet, tituloE);
-                List<EncabezadoColumna> columnas = report.getTabla().getEncabezados();
+                List<EncabezadoColumna> columnas = report.getEncabezados();
                 for (int i = 1; i <= columnas.size(); i++) {
                     ExcelUtils.nuevaCelda(r, i, columnas.get(i - 1).getNombre(), sheet, tituloE);
                 }
@@ -129,21 +130,56 @@ public class Table_ExcelReport extends ExcelPlantilla {
                 int rowIni = 11;
                 int colIni = 1;
                 int rowCount = 0;
-                for (Fila fila : reporte.getTabla().getFilas()) {
+                for (Fila fila : reporte.getFilas()) {
                     int colCount = 0;
                     Row row = hoja.createRow(rowIni + rowCount);
                     ExcelUtils.nuevaCelda(row, 0, rowCount + 1, hoja, datCli);
-                    for (EncabezadoColumna columna : reporte.getTabla().getEncabezados()) {
-                        ExcelUtils.nuevaCelda(row, colIni + colCount, fila.findValue(columna.getAtributoName()), hoja, tablad);
+                    for (EncabezadoColumna columna : reporte.getEncabezados()) {
+                        String name = columna.getAtributoName();
+                        String value = fila.findValue(name);
+                        if (reporte.getOperaciones() != null && columna.isSumar()) {
+                            try {
+                                Double d = Double.valueOf(value);
+                                ExcelUtils.nuevaCelda(row, colIni + colCount, d, hoja, Moneda);
+                            } catch (Exception e) {
+                                System.out.println("Valor: |" + value + "| <-- este no es un número wee no mames... ");
+                                ExcelUtils.nuevaCelda(row, colIni + colCount, value, hoja, Moneda);
+                            }
+                            reporte.getOperaciones().add(name, fila.getToDouble(name));
+                        } else {
+                            ExcelUtils.nuevaCelda(row, colIni + colCount, value, hoja, tablad);
+                        }
                         colCount++;
                     }
                     rowCount++;
                 }
-                int numCol = reporte.getTabla().getEncabezados().size();
-                System.out.println(rowCount + " filas y " + numCol + " columnas escritas en el reporte");
-                for (int i = 0; i <= numCol; i++) {
-                    hoja.autoSizeColumn(colIni + i);
+                int numCol = reporte.getEncabezados().size();
+                if (reporte.getOperaciones() != null) {
+                    Row row = hoja.createRow(rowIni + rowCount);
+                    ExcelUtils.nuevaCelda(row, 0, " ", hoja, tituloE);
+                    ExcelUtils.nuevaCelda(row, 1, "Total", hoja, tituloE);
+                    int colCount = 0;
+                    for (EncabezadoColumna ec : reporte.getEncabezados()) {
+                        if (ec.isSumar()) {
+                            String valor = reporte.getOperaciones().getValor(ec.getAtributoName());
+                            try {
+                                Double d = Double.valueOf(valor);
+                                System.out.println("valor es " + valor);
+                                ExcelUtils.nuevaCelda(row, colIni + colCount, d, hoja, totales);
+                            } catch (Exception e) {
+                                System.out.println("Valor: |" + valor + "| <-- este no es un número wee no mames... ");
+                                ExcelUtils.nuevaCelda(row, colIni + colCount, valor, hoja, totales);
+                            }
+                        } else if (colCount != 0) {
+                            ExcelUtils.nuevaCelda(row, colIni + colCount, " ", hoja, totales);
+                        }
+                        colCount++;
+                    }
                 }
+                for (int i = 0; i <= numCol; i++) {
+                    hoja.autoSizeColumn(i);
+                }
+                System.out.println(rowCount + " filas y " + numCol + " columnas escritas en el reporte");
                 cont++;
             }
             return true;

@@ -91,6 +91,17 @@ public class Fila {
         return value != null ? value : "";
     }
 
+    public double getToDouble(String atributoName) {
+        String value = findValue(atributoName);
+        try {
+            double valor = Double.valueOf(value);
+            return valor;
+        } catch (Exception e) {
+            return 0;
+        }
+
+    }
+
     /**
      * @param celdas the celdas to set
      */

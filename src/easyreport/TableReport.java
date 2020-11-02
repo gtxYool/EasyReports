@@ -13,9 +13,8 @@ import java.util.List;
  * @author DylanYool
  * @since 7 de septiembre, 2020.
  */
-public class TableReport {
+public class TableReport extends Tabla {
 
-    private Tabla tabla;
     private String titulo;
     private String subTitulo;
     private String Descripcion;
@@ -30,7 +29,7 @@ public class TableReport {
      *
      */
     public TableReport(List objetos, String titulo) {
-        this.tabla = new Tabla(objetos);
+        super(objetos);
         this.titulo = titulo;
         this.subTitulo = "";
         this.Descripcion = "";
@@ -60,7 +59,7 @@ public class TableReport {
      *
      */
     public TableReport(String[] encabezado, List objetos, String titulo) {
-        this.tabla = new Tabla(encabezado, objetos);
+        super(encabezado, objetos);
         this.titulo = titulo;
         this.subTitulo = "";
         this.Descripcion = "";
@@ -78,7 +77,7 @@ public class TableReport {
      *
      */
     public TableReport(List<String> encabezado, List objetos, String titulo) {
-        this.tabla = new Tabla(encabezado, objetos);
+        super(encabezado, objetos);
         this.titulo = titulo;
         this.subTitulo = "";
         this.Descripcion = "";
@@ -97,7 +96,7 @@ public class TableReport {
      *
      */
     public TableReport(String[] encabezado, String[] atributos, List objetos, String titulo) {
-        this.tabla = new Tabla(encabezado, atributos, objetos);
+        super(encabezado, atributos, objetos);
         this.titulo = titulo;
         this.subTitulo = "";
         this.Descripcion = "";
@@ -116,7 +115,7 @@ public class TableReport {
      *
      */
     public TableReport(String[] encabezado, String[] atributos, String JsonObjects, String titulo) {
-        this.tabla = new Tabla(encabezado, atributos, JsonObjects);
+        super(encabezado, atributos, JsonObjects);
         this.titulo = titulo;
         this.subTitulo = "";
         this.Descripcion = "";
@@ -134,8 +133,27 @@ public class TableReport {
      * @param titulo titulo que se mostrará al inicio del reporte.
      *
      */
+    public TableReport(String[] encabezado, String[] atributos, String JsonObjects, String titulo, String subtitulo) {
+        super(encabezado, atributos, JsonObjects);
+        this.titulo = titulo;
+        this.subTitulo = subtitulo;
+        this.Descripcion = "";
+    }
+
+    /**
+     *
+     * Crea un objeto TableReport
+     *
+     * @param encabezado listado de nombres a mostrar en las columnas.
+     * @param atributos listado de atributos asociados a dichas columnas(si el
+     * objeto no cuenta con atributo con dicho nombre quedará vacia la celda al
+     * momento de llenar la tabla)
+     * @param objetos listado de objetos a reportar.
+     * @param titulo titulo que se mostrará al inicio del reporte.
+     *
+     */
     public TableReport(List<String> encabezado, List<String> atributos, List objetos, String titulo) {
-        this.tabla = new Tabla(encabezado, atributos, objetos);
+        super(encabezado, atributos, objetos);
         this.titulo = titulo;
 
         this.subTitulo = "";
@@ -152,7 +170,7 @@ public class TableReport {
      * @param Descripcion Descripción del reporte
      */
     public TableReport(List objetos, String titulo, String subTitulo, String Descripcion) {
-        this.tabla = new Tabla(objetos);
+        super(objetos);
         this.titulo = titulo;
         this.subTitulo = subTitulo;
 
@@ -170,7 +188,7 @@ public class TableReport {
      * @param Descripcion Descripción del reporte
      */
     public TableReport(String[] encabezado, List objetos, String titulo, String subTitulo, String Descripcion) {
-        this.tabla = new Tabla(encabezado, objetos);
+        super(encabezado, objetos);
         this.titulo = titulo;
         this.subTitulo = subTitulo;
 
@@ -188,7 +206,7 @@ public class TableReport {
      * @param Descripcion Descripción del reporte
      */
     public TableReport(List<String> encabezado, List objetos, String titulo, String subTitulo, String Descripcion) {
-        this.tabla = new Tabla(encabezado, objetos);
+        super(encabezado, objetos);
         this.titulo = titulo;
         this.subTitulo = subTitulo;
 
@@ -209,7 +227,7 @@ public class TableReport {
      * @param Descripcion Descripción del reporte
      */
     public TableReport(String[] encabezado, String[] atributos, List objetos, String titulo, String subTitulo, String Descripcion) {
-        this.tabla = new Tabla(encabezado, atributos, objetos);
+        super(encabezado, atributos, objetos);
         this.titulo = titulo;
         this.subTitulo = subTitulo;
         this.Descripcion = Descripcion;
@@ -229,7 +247,7 @@ public class TableReport {
      * @param Descripcion Descripción del reporte
      */
     public TableReport(String[] encabezado, String[] atributos, String JsonObject, String titulo, String subTitulo, String Descripcion) {
-        this.tabla = new Tabla(encabezado, atributos, JsonObject);
+        super(encabezado, atributos, JsonObject);
         this.titulo = titulo;
         this.subTitulo = subTitulo;
         this.Descripcion = Descripcion;
@@ -250,7 +268,7 @@ public class TableReport {
      * @param Descripcion Descripción del reporte
      */
     public TableReport(List<String> encabezado, List<String> atributos, List objetos, String titulo, String subTitulo, String Descripcion) {
-        this.tabla = new Tabla(encabezado, atributos, objetos);
+        super(encabezado, atributos, objetos);
         this.titulo = titulo;
         this.subTitulo = subTitulo;
 
@@ -269,7 +287,7 @@ public class TableReport {
      * @param Descripcion Descripción del reporte
      */
     public TableReport(String[] encabezado, List objetos, String titulo, String Descripcion) {
-        this.tabla = new Tabla(encabezado, objetos);
+        super(encabezado, objetos);
         this.titulo = titulo;
         this.subTitulo = "";
 
@@ -288,7 +306,7 @@ public class TableReport {
      * @param Descripcion Descripción del reporte
      */
     public TableReport(List<String> encabezado, List objetos, String titulo, String Descripcion) {
-        this.tabla = new Tabla(encabezado, objetos);
+        super(encabezado, objetos);
         this.titulo = titulo;
         this.subTitulo = "";
 
@@ -309,7 +327,7 @@ public class TableReport {
      * @param Descripcion Descripción del reporte
      */
     public TableReport(String[] encabezado, String[] atributos, List objetos, String titulo, String Descripcion) {
-        this.tabla = new Tabla(encabezado, atributos, objetos);
+        super(encabezado, atributos, objetos);
         this.titulo = titulo;
         this.subTitulo = "";
 
@@ -330,7 +348,7 @@ public class TableReport {
      * @param Descripcion Descripción del reporte
      */
     public TableReport(List<String> encabezado, List<String> atributos, List objetos, String titulo, String Descripcion) {
-        this.tabla = new Tabla(encabezado, atributos, objetos);
+        super(encabezado, atributos, objetos);
         this.titulo = titulo;
         this.subTitulo = "";
 
@@ -378,20 +396,6 @@ public class TableReport {
      */
     public void setDescripcion(String Descripcion) {
         this.Descripcion = Descripcion;
-    }
-
-    /**
-     * @return the tabla
-     */
-    public Tabla getTabla() {
-        return tabla;
-    }
-
-    /**
-     * @param tabla the tabla to set
-     */
-    public void setTabla(Tabla tabla) {
-        this.tabla = tabla;
     }
 
 }

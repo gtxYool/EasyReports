@@ -56,15 +56,14 @@ public class ExcelPlantilla {
     private HSSFCellStyle Sombreado_WhiteBold16;
     private HSSFCellStyle WhiteBackground_Black_B18;
     private HSSFCellStyle WhiteBackground_Blue_B28;
-    CellStyle encabe;//Nombre TEASA
-    CellStyle datCli;//Datos del cliente
-    CellStyle tablad;//Datos en la tabla
-    CellStyle datBanco;
-    CellStyle fechas;//Fechas en la tabla
-
-    CellStyle tituloE;//encabezado tabla
-    CellStyle tituloStyle;//titulo "datos bancarios"
-    CellStyle totales;//totales de la tabla
+    CellStyle encabe;
+    CellStyle datCli;
+    CellStyle tablad;
+    CellStyle fechas;
+    CellStyle tituloE;
+    CellStyle tituloStyle;
+    CellStyle totales;
+    CellStyle Moneda;
     private HSSFFont Black16;
     private HSSFFont Black14;
     private HSSFFont Black12;
@@ -120,17 +119,10 @@ public class ExcelPlantilla {
         try {
             HSSFSheet sheet = wb.createSheet(titulo);
             sheet.setDisplayGridlines(false);
-//            HSSFRow row = sheet.createRow(1);
-//            HSSFCell cell = row.createCell(1);
             ExcelUtils.nuevaCelda(0, 0, "Transporte, Empaque y Almacenaje, S.A.", sheet, encabe);
             ExcelUtils.CombinarCentrar(0, 1, 0, 10, sheet, true);
-//            cell.setCellStyle(getDefault_tituloStyle());
-//            cell.setCellValue(titulo);
-
-//            row = sheet.createRow(2);
-//            cell = row.createCell(1);
             ExcelUtils.nuevaCelda(2, 1, titulo, sheet, tituloStyle);
-            ExcelUtils.CombinarCentrar(2, 2, 1, 4, sheet, true);
+            ExcelUtils.CombinarCentrar(2, 2, 1, 5, sheet, true);
             ExcelUtils.nuevaCelda(3, 1, subTitulo, sheet, datCli);
             ExcelUtils.CombinarCentrar(3, 3, 1, 4, sheet, true);
             ExcelUtils.nuevaCelda(5, 1, "Fecha: " + this.fechora.replace(" ", "_Hora: "), sheet, datCli);
@@ -139,14 +131,6 @@ public class ExcelPlantilla {
             getDefault_descripcionStyle().setVerticalAlignment(VerticalAlignment.TOP);
             ExcelUtils.nuevaCelda(6, 1, descripcion, sheet, getDefault_descripcionStyle());
             ExcelUtils.CombinarCentrar(6, 8, 1, 4, sheet, true);
-//            cell.setCellStyle(getDefault_subTituloStyle());
-//            cell.setCellValue(subTitulo);
-
-//            sheet.setColumnWidth(1, 12000);
-//            sheet.addMergedRegion(new CellRangeAddress(1, 1, 1, 5));
-//            sheet.addMergedRegion(new CellRangeAddress(2, 2, 1, 2));
-//            sheet.addMergedRegion(new CellRangeAddress(2, 2, 3, 5));
-//            sheet.addMergedRegion(new CellRangeAddress(3, 4, 1, 5));
             addImage(wb, sheet);
             System.out.println("ReporteCreado");
             return sheet;
@@ -210,7 +194,7 @@ public class ExcelPlantilla {
 
     private void addImage(HSSFWorkbook workbook, Sheet sheet) {
         try {
-            InputStream input = new FileInputStream("src/com/guatex/proyectobase/imagenes/Guatex2.jpg");
+            InputStream input = new FileInputStream("C:/TEMPORAL/imagenes/Guatex2.jpg");
             byte[] imageInByte = IOUtils.toByteArray(input);
             int pictureIdx = workbook.addPicture(imageInByte, Workbook.PICTURE_TYPE_PNG);
             input.close();
@@ -317,15 +301,15 @@ public class ExcelPlantilla {
         getWhiteBackground_Blue_B28().setAlignment(HorizontalAlignment.LEFT);
         getWhiteBackground_Blue_B28().setIndention((short) 3);
 
-        encabe = workbook.createCellStyle();//Nombre TEASA
-        datCli = workbook.createCellStyle();//Datos del cliente
-        tablad = workbook.createCellStyle();//Datos en la tabla
-        datBanco = workbook.createCellStyle();
-        fechas = workbook.createCellStyle();//Fechas en la tabla
+        encabe = workbook.createCellStyle();
+        datCli = workbook.createCellStyle();
+        tablad = workbook.createCellStyle();
+        fechas = workbook.createCellStyle();
 
-        tituloE = workbook.createCellStyle();//encabezado tabla
-        tituloStyle = workbook.createCellStyle();//titulo "datos bancarios"
-        totales = workbook.createCellStyle();//totales de la tabla
+        tituloE = workbook.createCellStyle();
+        tituloStyle = workbook.createCellStyle();
+        totales = workbook.createCellStyle();
+        Moneda = workbook.createCellStyle();
 
         HSSFPalette paleta = workbook.getCustomPalette();
         paleta.setColorAtIndex(IndexedColors.PINK.index, (byte) 128, (byte) 100, (byte) 162);
@@ -367,8 +351,13 @@ public class ExcelPlantilla {
         //Titulo: Datos Bancarios
         tituloStyle.setAlignment(HorizontalAlignment.CENTER);
         tituloStyle.setFont(titdatBan);
-        datBanco.setAlignment(HorizontalAlignment.CENTER);
-        datBanco.setFont(datBan);
+        tituloStyle.setBottomBorderColor(IndexedColors.CORAL.getIndex());
+        tituloStyle.setTopBorderColor(IndexedColors.CORAL.getIndex());
+        tituloStyle.setBorderBottom(BorderStyle.THIN);//
+        tituloStyle.setBorderTop(BorderStyle.THIN);
+        tituloStyle.setBorderLeft(BorderStyle.THIN);
+        tituloStyle.setBorderRight(BorderStyle.THIN);
+        tituloStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 
         //Encabezados de tabla
         tituloE.setFillForegroundColor(IndexedColors.AQUA.getIndex());
@@ -383,8 +372,17 @@ public class ExcelPlantilla {
 
         //Totales de tabla
         HSSFDataFormat df = workbook.createDataFormat();
-        totales.setDataFormat(df.getFormat("#,##0.00"));
+        totales.setDataFormat(df.getFormat("Q #,##0.00"));
         totales.setAlignment(HorizontalAlignment.RIGHT);
+        totales.setBottomBorderColor(IndexedColors.CORAL.getIndex());
+        totales.setTopBorderColor(IndexedColors.CORAL.getIndex());
+        totales.setBorderBottom(BorderStyle.THIN);//
+        totales.setBorderTop(BorderStyle.THIN);
+        
+        Moneda.setDataFormat(df.getFormat("Q #,##0.00"));
+        Moneda.setAlignment(HorizontalAlignment.RIGHT);
+        Moneda.setFont(tabla);
+
 
         fechas.setAlignment(HorizontalAlignment.RIGHT);
         fechas.setFont(tabla);
