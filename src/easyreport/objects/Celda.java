@@ -58,7 +58,8 @@ public class Celda {
      * @throws IllegalAccessException Error al acceder al atributo
      */
     public void setAtributoValue(Object instance) throws IllegalArgumentException, IllegalAccessException {
-        this.atributoValue = this.atributo.get(instance).toString();
+        Object ob = this.atributo.get(instance);
+        this.atributoValue = ob != null ? ob.toString() : "";
     }
 
     /**

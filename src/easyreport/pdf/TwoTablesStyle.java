@@ -24,6 +24,7 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
 
 /**
  *
@@ -37,6 +38,7 @@ public class TwoTablesStyle extends Plantilla {
     private final String fechora = dtf.format(date).toString().trim();
     //private final String logoPath = "/var/lib/sacod_reportgenerator/Guatex2.jpg";
     private final String logoPath = "C:\\TEMPORAL\\imagenes\\Guatex2.jpg";
+    private String ruta = "";
     TableReport tbl;
 
     public TwoTablesStyle(String PATH, String nombreArchivo)
@@ -44,9 +46,10 @@ public class TwoTablesStyle extends Plantilla {
         try {
             document = new Document(PageSize.A4.rotate(), 0, 0, 0, 0);
             document.setMargins(10, 10, 20, 10);
-            // String ruta = PATH + "/" + nombreArchivo + ".pdf";
+            String fechora = this.fechora.replace(":", "-").replace(" ", "_T");
+            // String ruta = PATH + "/" + nombreArchivo + fechora+ ".pdf";
 
-            String ruta = PATH + "\\" + nombreArchivo + ".pdf";
+            ruta = PATH + "\\" + nombreArchivo + fechora + ".pdf";
             System.out.println(ruta);
             File file = new File(ruta);
             file.getParentFile().mkdirs();
@@ -116,6 +119,19 @@ public class TwoTablesStyle extends Plantilla {
             document.close();
             System.out.println("Cerrando el documento.");
         }
+    }
+
+    public boolean AbrirArchivo() {
+        try {
+            File path = new File(ruta);
+            Desktop.getDesktop().open(path);
+            return true;
+        } catch (IOException ex) {
+            System.err.println("Algo salio mal intentando abrir el reporte. Err:" + ex.getMessage());
+            ex.printStackTrace();
+            return false;
+        }
+
     }
 
     private float getScaler(Document document, Image image) throws Exception {

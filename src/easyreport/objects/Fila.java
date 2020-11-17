@@ -66,9 +66,9 @@ public class Fila {
                 celdas.add(nuevaCelda);
             }
         } catch (IllegalArgumentException ex) {
-            Logger.getLogger(Fila.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(Fila.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
 

@@ -28,15 +28,17 @@ import java.text.NumberFormat;
 public class Plantilla {
 
     LocalDateTime date = java.time.LocalDateTime.now();
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-M-yyyy hh:mm:ss");
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     private final String fechora = dtf.format(date).toString().trim();
+    private final String titleFechora = dtf2.format(date).toString().trim();
     private final Font normalFontSmall = FontFactory.getFont("Arial", BaseFont.IDENTITY_H, 8, Font.ITALIC);
     private final Font boldFontNormal = FontFactory.getFont("Arial", BaseFont.IDENTITY_H, 5, Font.BOLD);
     private final Font normalFontTitle = FontFactory.getFont("Arial", BaseFont.IDENTITY_H, 4, Font.BOLDITALIC);
     private final Font boldFontTitle = FontFactory.getFont("Arial", BaseFont.IDENTITY_H, 7, Font.BOLD, BaseColor.BLACK);
     private final Font boldFontTitleBig = FontFactory.getFont("Arial", BaseFont.IDENTITY_H, 15, Font.BOLD);
-    private final Font normalFontTitleBig = FontFactory.getFont("Arial", BaseFont.IDENTITY_H, 15, Font.NORMAL);
-    private final Font normalFontTitleMedium = FontFactory.getFont("Arial", BaseFont.IDENTITY_H, 6, Font.BOLD);
+    private final Font normalFontTitleBig = FontFactory.getFont("Arial", BaseFont.IDENTITY_H, 12, Font.NORMAL);
+    private final Font normalFontTitleMedium = FontFactory.getFont("Arial", BaseFont.IDENTITY_H, 10, Font.NORMAL);
     protected final String NEWLINE = "\n";
     protected final String BLANK_SPACE = "\n\n";
     private int numcol = 0;
@@ -97,8 +99,8 @@ public class Plantilla {
         table.setWidthPercentage(width);
         table.setSpacingAfter(20f);
         float fntSize, lineSpacing;
-        fntSize = 6f;
-        lineSpacing = 7f;
+        fntSize = 7f;
+        lineSpacing = 8f;
         int i = 1;
         numcol = tbl.getEncabezados().size();
         for (EncabezadoColumna ec : tbl.getEncabezados()) {
@@ -119,7 +121,7 @@ public class Plantilla {
                     dato = new Paragraph("Q " + nf.format(Double.valueOf(value)),
                             FontFactory.getFont(FontFactory.COURIER, fntSize));
                     dato.setAlignment(Element.ALIGN_RIGHT);
-                    dato.setIndentationRight(width > 90 ? 260 / numcol : 90 / numcol);
+                    dato.setIndentationRight(width > 90 ? 180 / numcol : 90 / numcol);
                     cellValue.addElement(dato);
                     table.addCell(cellValue);
                 } else {
@@ -199,12 +201,12 @@ public class Plantilla {
         cEncabezado.setBorder(0);
         cEncabezado.setHorizontalAlignment(Element.ALIGN_CENTER);
         cEncabezado.setColspan(2);
-        cEncabezado.addElement(new Chunk("Transporte, Empaque y Almacenaje, S.A.", normalFontTitleMedium));
+        cEncabezado.addElement(new Chunk("Transporte, Empaque y Almacenaje, S.A.", normalFontTitleBig));
         PdfPCell cFecha = new PdfPCell();
         cFecha.setBorder(0);
         cFecha.setHorizontalAlignment(Element.ALIGN_CENTER);
         cFecha.setColspan(2);
-        cFecha.addElement(new Chunk("Fecha: " + fechora.replace(" ", " Hora: "), normalFontTitleMedium));
+        cFecha.addElement(new Chunk("Fecha: " + titleFechora.replace(" ", " Hora: "), normalFontTitleMedium));
         table.addCell(cEncabezado);
         table.addCell(cFecha);
         return table;

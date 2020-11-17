@@ -130,28 +130,30 @@ public class Table_ExcelReport extends ExcelPlantilla {
                 int rowIni = 11;
                 int colIni = 1;
                 int rowCount = 0;
-                for (Fila fila : reporte.getFilas()) {
-                    int colCount = 0;
-                    Row row = hoja.createRow(rowIni + rowCount);
-                    ExcelUtils.nuevaCelda(row, 0, rowCount + 1, hoja, datCli);
-                    for (EncabezadoColumna columna : reporte.getEncabezados()) {
-                        String name = columna.getAtributoName();
-                        String value = fila.findValue(name);
-                        if (reporte.getOperaciones() != null && columna.isSumar()) {
-                            try {
-                                Double d = Double.valueOf(value);
-                                ExcelUtils.nuevaCelda(row, colIni + colCount, d, hoja, Moneda);
-                            } catch (Exception e) {
-                                System.out.println("Valor: |" + value + "| <-- este no es un número wee no mames... ");
-                                ExcelUtils.nuevaCelda(row, colIni + colCount, value, hoja, Moneda);
+                if (reporte.getFilas() != null) {
+                    for (Fila fila : reporte.getFilas()) {
+                        int colCount = 0;
+                        Row row = hoja.createRow(rowIni + rowCount);
+                        ExcelUtils.nuevaCelda(row, 0, rowCount + 1, hoja, datCli);
+                        for (EncabezadoColumna columna : reporte.getEncabezados()) {
+                            String name = columna.getAtributoName();
+                            String value = fila.findValue(name);
+                            if (reporte.getOperaciones() != null && columna.isSumar()) {
+                                try {
+                                    Double d = Double.valueOf(value);
+                                    ExcelUtils.nuevaCelda(row, colIni + colCount, d, hoja, Moneda);
+                                } catch (Exception e) {
+                                    System.out.println("Valor: |" + value + "| <-- este no es un número wee no mames... ");
+                                    ExcelUtils.nuevaCelda(row, colIni + colCount, value, hoja, Moneda);
+                                }
+                                reporte.getOperaciones().add(name, fila.getToDouble(name));
+                            } else {
+                                ExcelUtils.nuevaCelda(row, colIni + colCount, value, hoja, tablad);
                             }
-                            reporte.getOperaciones().add(name, fila.getToDouble(name));
-                        } else {
-                            ExcelUtils.nuevaCelda(row, colIni + colCount, value, hoja, tablad);
+                            colCount++;
                         }
-                        colCount++;
+                        rowCount++;
                     }
-                    rowCount++;
                 }
                 int numCol = reporte.getEncabezados().size();
                 if (reporte.getOperaciones() != null) {

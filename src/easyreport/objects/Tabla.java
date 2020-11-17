@@ -139,8 +139,10 @@ public class Tabla {
 
     private List<Fila> generarFilas(List<Object> objetos) {
         List<Fila> filas = new LinkedList<Fila>();
-        for (Object obj : objetos) {
-            filas.add(new Fila(obj));
+        if (objetos != null) {
+            for (Object obj : objetos) {
+                filas.add(new Fila(obj));
+            }
         }
         return filas.size() > 0 ? filas : null;
     }
