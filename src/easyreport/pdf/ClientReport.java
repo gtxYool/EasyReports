@@ -89,7 +89,7 @@ public class ClientReport extends Plantilla {
                 document.add(getResumen(tbl, width));
                 document.add(createTable(tbl, width));
                 if (tbl.getOperaciones() != null && tbl.getOperaciones().getCampos() != null
-                        && tbl.getOperaciones().getCampos().length > 0) {
+                        && tbl.getOperaciones().getCampos().size() > 0) {
                     document.add(new Paragraph(new Chunk(NEWLINE)));
                     document.add(new Paragraph(new Chunk(NEWLINE)));
                 }

@@ -5,44 +5,53 @@
  */
 package easyreport.objects;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+
 /**
  *
  * @author AHERNANDEZ
  */
 public class Operation {
 
-    private String[] campos;
-    boolean suma;
-    private double[] totales;
+    private List<pair> campos = new LinkedList<pair>();
+    private boolean suma;
 
     public Operation() {
     }
 
     public Operation(String[] campos) {
-        this.campos = campos;
-        totales = new double[campos.length];
+        setCampos(new ArrayList<>(Arrays.asList(campos)));
+    }
+
+    public void addCampos(String[] campos) {
+        for (String g : campos) {
+            getCampos().add(new pair(g));
+        }
     }
 
     public void add(String campo, double valor) {
         int index = getIndex(campo);
         if (index >= 0) {
-            getTotales()[index] += valor;
-            System.out.println(getTotales()[index]);
+            double d = valor;
+            getCampos().get(index).addValor(d);
         }
     }
 
     public String getValor(String campo) {
         int index = getIndex(campo);
         if (index >= 0) {
-            return "" + getTotales()[index];
+            return "" + getCampos().get(index).getValor();
         }
         return "0";
     }
 
     private int getIndex(String campo) {
-        for (int i = 0; i < getCampos().length; i++) {
-            System.out.println(getCampos()[i] + " : " + campo);
-            if (getCampos()[i].equalsIgnoreCase(campo)) {
+        for (int i = 0; i < getCampos().size(); i++) {
+            if (getCampos().get(i).getNombre().equalsIgnoreCase(campo)) {
+                System.out.println(getCampos().get(i).getNombre() + " en index: " + i);
                 return i;
             }
         }
@@ -52,28 +61,60 @@ public class Operation {
     /**
      * @return the campos
      */
-    public String[] getCampos() {
+    public List<pair> getCampos() {
         return campos;
     }
 
     /**
-     * @return the totales
+     * @return the suma
      */
-    public double[] getTotales() {
-        return totales;
+    public boolean isSuma() {
+        return suma;
     }
 
     /**
      * @param campos the campos to set
      */
-    public void setCampos(String[] campos) {
-        this.campos = campos;
+    public void setCampos(List<String> campos) {
+        for (String g : campos) {
+            this.campos.add(new pair(g));
+        }
     }
 
     /**
-     * @param totales the totales to set
+     * @param suma the suma to set
      */
-    public void setTotales(double[] totales) {
-        this.totales = totales;
+    public void setSuma(boolean suma) {
+        this.suma = suma;
+    }
+
+    private class pair {
+
+        private String nombre = "";
+        private Double valor = 0.0;
+
+        public pair(String nombre) {
+            this.nombre = nombre;
+        }
+
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
+        }
+
+        public void setValor(Double valor) {
+            this.valor = valor;
+        }
+
+        public void addValor(Double valor) {
+            setValor(getValor() + valor);
+        }
+
+        public Double getValor() {
+            return this.valor;
+        }
+
+        public String getNombre() {
+            return this.nombre;
+        }
     }
 }

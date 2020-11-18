@@ -57,7 +57,7 @@ public class Table_ExcelReport extends ExcelPlantilla {
         String subTitulo = report.getSubTitulo();
         String descripcion = report.getDescripcion();
         this.workbook = generarXLS(titulo, subTitulo, descripcion);
-        setStyles();
+        DefineStyles();
         sheets.add(report);
         DrawTable(report);
     }
@@ -138,17 +138,17 @@ public class Table_ExcelReport extends ExcelPlantilla {
                         for (EncabezadoColumna columna : reporte.getEncabezados()) {
                             String name = columna.getAtributoName();
                             String value = fila.findValue(name);
-                            if (reporte.getOperaciones() != null && columna.isSumar()) {
+                            if (reporte.getOperaciones() != null && columna.isOperar()) {
                                 try {
                                     Double d = Double.valueOf(value);
-                                    ExcelUtils.nuevaCelda(row, colIni + colCount, d, hoja, Moneda);
+                                    ExcelUtils.nuevaCelda(row, colIni + colCount, d, hoja, getStyle4Operation(columna));
                                 } catch (Exception e) {
                                     System.out.println("Valor: |" + value + "| <-- este no es un número wee no mames... ");
-                                    ExcelUtils.nuevaCelda(row, colIni + colCount, value, hoja, Moneda);
+                                    ExcelUtils.nuevaCelda(row, colIni + colCount, value, hoja, texto);
                                 }
                                 reporte.getOperaciones().add(name, fila.getToDouble(name));
                             } else {
-                                ExcelUtils.nuevaCelda(row, colIni + colCount, value, hoja, tablad);
+                                ExcelUtils.nuevaCelda(row, colIni + colCount, value, hoja, texto);
                             }
                             colCount++;
                         }
@@ -162,18 +162,18 @@ public class Table_ExcelReport extends ExcelPlantilla {
                     ExcelUtils.nuevaCelda(row, 1, "Total", hoja, tituloE);
                     int colCount = 0;
                     for (EncabezadoColumna ec : reporte.getEncabezados()) {
-                        if (ec.isSumar()) {
+                        if (ec.isOperar()) {
                             String valor = reporte.getOperaciones().getValor(ec.getAtributoName());
                             try {
                                 Double d = Double.valueOf(valor);
                                 System.out.println("valor es " + valor);
-                                ExcelUtils.nuevaCelda(row, colIni + colCount, d, hoja, totales);
+                                ExcelUtils.nuevaCelda(row, colIni + colCount, d, hoja, getStyle4Total(ec));
                             } catch (Exception e) {
                                 System.out.println("Valor: |" + valor + "| <-- este no es un número wee no mames... ");
-                                ExcelUtils.nuevaCelda(row, colIni + colCount, valor, hoja, totales);
+                                ExcelUtils.nuevaCelda(row, colIni + colCount, valor, hoja, total);
                             }
                         } else if (colCount != 0) {
-                            ExcelUtils.nuevaCelda(row, colIni + colCount, " ", hoja, totales);
+                            ExcelUtils.nuevaCelda(row, colIni + colCount, " ", hoja, total);
                         }
                         colCount++;
                     }
@@ -192,6 +192,31 @@ public class Table_ExcelReport extends ExcelPlantilla {
         }
     }
 
+    private CellStyle getStyle4Operation(EncabezadoColumna ec) {
+        int tipOpe = ec.getTipOpe();
+        switch (tipOpe) {
+            case 1://normal
+                return Number;
+            case 2://Moneda
+                return Moneda;
+            default:
+                return texto;
+        }
+    }
+
+    private CellStyle getStyle4Total(EncabezadoColumna ec) {
+        int tipOpe = ec.getTipOpe();
+        switch (tipOpe) {
+            case 1://normal
+                return total;
+            case 2://Moneda
+                return totalM;
+            default:
+                return total;
+        }
+    }
+
+    //-------------------------DNT----------------------------------------//
     /**
      * crea un archivo xls en la ruta especificada con el nombre dado, sino
      * existe la carpeta la crea.
@@ -214,7 +239,7 @@ public class Table_ExcelReport extends ExcelPlantilla {
         return AbrirArchivo();
     }
 
-    private void setStyles() {
+    private void DefineStyles() {
         setTituloStyle(getWhiteBackground_Blue_B28());
 
         setSubTituloStyle(getWhiteBackground_Black_B18());

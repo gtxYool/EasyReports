@@ -63,7 +63,7 @@ public class Plantilla {
         for (Fila fl : tbl.getFilas()) {
             for (EncabezadoColumna ec : tbl.getEncabezados()) {
                 String name = ec.getAtributoName();
-                if (tbl.getOperaciones() != null && ec.isSumar()) {
+                if (tbl.getOperaciones() != null && ec.isOperar()) {
                     tbl.getOperaciones().add(name, fl.getToDouble(name));
                 }
             }
@@ -75,7 +75,7 @@ public class Plantilla {
             for (EncabezadoColumna ec : tbl.getEncabezados()) {
                 PdfPCell cValor = new PdfPCell();
                 cValor.setBorder(2);
-                if (ec.isSumar()) {
+                if (ec.isOperar()) {
                     String valor = tbl.getOperaciones().getValor(ec.getAtributoName());
                     Paragraph dato = new Paragraph(new Phrase("Q " + nf.format(Double.valueOf(valor)), FontFactory.getFont(FontFactory.COURIER, 7f)));
                     dato.setAlignment(Element.ALIGN_CENTER);
@@ -117,7 +117,7 @@ public class Plantilla {
                 cellValue.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 Paragraph dato;
                 cellValue.setBorder(0);
-                if (tbl.getOperaciones() != null && ec.isSumar()) {
+                if (tbl.getOperaciones() != null && ec.isOperar()) {
                     dato = new Paragraph("Q " + nf.format(Double.valueOf(value)),
                             FontFactory.getFont(FontFactory.COURIER, fntSize));
                     dato.setAlignment(Element.ALIGN_RIGHT);

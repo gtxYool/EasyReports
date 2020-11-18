@@ -14,7 +14,8 @@ public class EncabezadoColumna {
 
     private String Nombre;
     private String atributoName;
-    private boolean sumar = false;
+    private boolean operar = false;
+    private int tipOpe = 0;//NO
     private int ancho;
     private int altura;
 
@@ -61,17 +62,17 @@ public class EncabezadoColumna {
     }
 
     /**
-     * @return the sumar
+     * @return the operar
      */
-    public boolean isSumar() {
-        return sumar;
+    public boolean isOperar() {
+        return operar;
     }
 
     /**
-     * @param sumar the sumar to set
+     * @param operar the operar to set
      */
-    public void setSumar(boolean sumar) {
-        this.sumar = sumar;
+    public void setOperar(boolean operar) {
+        this.operar = operar;
     }
 
     /**
@@ -114,6 +115,27 @@ public class EncabezadoColumna {
      */
     public void setAltura(int altura) {
         this.altura = altura;
+    }
+
+    /**
+     * @return the tipOpe
+     */
+    public int getTipOpe() {
+        return tipOpe;
+    }
+
+    /**
+     * 0=No,1=sumaNormal,2=Suma Monetaria
+     * 
+     * @param tipOpe the tipOpe to set
+     */
+    public void setTipOpe(int tipOpe) {
+        if (tipOpe > 0) {
+            setOperar(true);
+        } else {
+            setOperar(false);
+        }
+        this.tipOpe = tipOpe;
     }
 
 }

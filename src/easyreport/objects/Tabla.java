@@ -60,11 +60,29 @@ public class Tabla {
     }
 
     public void addOperation(String campos) {
-        setOperaciones(new Operation(campos.split(",")));
-        for (String st : getOperaciones().getCampos()) {
+        addOperaciones(campos);
+        for (String st : campos.split(",")) {
             for (EncabezadoColumna ec : getEncabezados()) {
                 if (ec.getAtributoName().equalsIgnoreCase(st)) {
-                    ec.setSumar(true);
+                    ec.setOperar(true);
+                    System.out.println(ec.getAtributoName() + " set suma true");
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     * @param campos
+     * @param tipo 1=normal,2=moneda
+     */
+    public void addOperation(String campos, int tipo) {
+        addOperaciones(campos);
+        for (String st : campos.split(",")) {
+            for (EncabezadoColumna ec : getEncabezados()) {
+                if (ec.getAtributoName().equalsIgnoreCase(st)) {
+                    ec.setTipOpe(tipo);
+                    ec.setOperar(true);
                     System.out.println(ec.getAtributoName() + " set suma true");
                 }
             }
@@ -195,8 +213,12 @@ public class Tabla {
     /**
      * @param operaciones the operaciones to set
      */
-    public void setOperaciones(Operation operaciones) {
-        this.operaciones = operaciones;
+    public void addOperaciones(String campos) {
+        if (this.operaciones == null) {
+            this.operaciones = new Operation(campos.split(","));
+        } else {
+            this.operaciones.addCampos(campos.split(","));
+        }
     }
 
 }

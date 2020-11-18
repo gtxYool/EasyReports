@@ -62,7 +62,10 @@ public class ExcelPlantilla {
     CellStyle fechas;
     CellStyle tituloE;
     CellStyle tituloStyle;
-    CellStyle totales;
+    CellStyle totalM;
+    CellStyle total;
+    CellStyle texto;
+    CellStyle Number;
     CellStyle Moneda;
     private HSSFFont Black16;
     private HSSFFont Black14;
@@ -117,7 +120,7 @@ public class ExcelPlantilla {
      */
     protected Sheet CreateSheet(HSSFWorkbook wb) {
         try {
-            HSSFSheet sheet = wb.createSheet(titulo);
+            HSSFSheet sheet = wb.createSheet(subTitulo != null && !subTitulo.isEmpty() ? subTitulo : titulo);
             sheet.setDisplayGridlines(false);
             ExcelUtils.nuevaCelda(0, 0, "Transporte, Empaque y Almacenaje, S.A.", sheet, encabe);
             ExcelUtils.CombinarCentrar(0, 1, 0, 10, sheet, true);
@@ -256,10 +259,6 @@ public class ExcelPlantilla {
 
         InitFonts(workbook); // ejecuta el metodo para iniciar fuentes
 
-        setNormi(workbook.createCellStyle());
-        getNormi().setFont(getBlack16());
-        getNormi().setAlignment(HorizontalAlignment.CENTER);
-        getNormi().setVerticalAlignment(VerticalAlignment.BOTTOM);
         setNormi_BordeSimple(workbook.createCellStyle());
         getNormi_BordeSimple().setFont(getBlack16());
         getNormi_BordeSimple().setAlignment(HorizontalAlignment.CENTER);
@@ -308,8 +307,10 @@ public class ExcelPlantilla {
 
         tituloE = workbook.createCellStyle();
         tituloStyle = workbook.createCellStyle();
-        totales = workbook.createCellStyle();
+        totalM = workbook.createCellStyle();
         Moneda = workbook.createCellStyle();
+        total = workbook.createCellStyle();
+        Number = workbook.createCellStyle();
 
         HSSFPalette paleta = workbook.getCustomPalette();
         paleta.setColorAtIndex(IndexedColors.PINK.index, (byte) 128, (byte) 100, (byte) 162);
@@ -345,6 +346,11 @@ public class ExcelPlantilla {
         encTabla.setBold(true);
         encTabla.setColor(IndexedColors.WHITE.getIndex());
 
+        texto = workbook.createCellStyle();
+        texto.setFont(tabla);
+        texto.setAlignment(HorizontalAlignment.CENTER);
+        texto.setVerticalAlignment(VerticalAlignment.BOTTOM);
+
         encabe.setAlignment(HorizontalAlignment.CENTER);//Nombre de la empresa
         encabe.setFont(nomGuatex);
 
@@ -372,17 +378,27 @@ public class ExcelPlantilla {
 
         //Totales de tabla
         HSSFDataFormat df = workbook.createDataFormat();
-        totales.setDataFormat(df.getFormat("Q #,##0.00"));
-        totales.setAlignment(HorizontalAlignment.RIGHT);
-        totales.setBottomBorderColor(IndexedColors.CORAL.getIndex());
-        totales.setTopBorderColor(IndexedColors.CORAL.getIndex());
-        totales.setBorderBottom(BorderStyle.THIN);//
-        totales.setBorderTop(BorderStyle.THIN);
-        
+        totalM.setDataFormat(df.getFormat("Q #,##0.00"));
+        totalM.setAlignment(HorizontalAlignment.RIGHT);
+        totalM.setBottomBorderColor(IndexedColors.CORAL.getIndex());
+        totalM.setTopBorderColor(IndexedColors.CORAL.getIndex());
+        totalM.setBorderBottom(BorderStyle.THIN);//
+        totalM.setBorderTop(BorderStyle.THIN);
+
         Moneda.setDataFormat(df.getFormat("Q #,##0.00"));
         Moneda.setAlignment(HorizontalAlignment.RIGHT);
         Moneda.setFont(tabla);
 
+        total.setDataFormat(df.getFormat("#,##0"));
+        total.setAlignment(HorizontalAlignment.RIGHT);
+        total.setBottomBorderColor(IndexedColors.CORAL.getIndex());
+        total.setTopBorderColor(IndexedColors.CORAL.getIndex());
+        total.setBorderBottom(BorderStyle.THIN);//
+        total.setBorderTop(BorderStyle.THIN);
+
+        Number.setDataFormat(df.getFormat("#,##0"));
+        Number.setAlignment(HorizontalAlignment.RIGHT);
+        Number.setFont(tabla);
 
         fechas.setAlignment(HorizontalAlignment.RIGHT);
         fechas.setFont(tabla);
@@ -392,7 +408,7 @@ public class ExcelPlantilla {
         datCli.setAlignment(HorizontalAlignment.LEFT);//Datos del cliente
         datCli.setFont(tituCli);
 
-        tablad.setDataFormat(df.getFormat("#,##0.00"));
+        tablad.setDataFormat(df.getFormat("#,##0"));
         tablad.setAlignment(HorizontalAlignment.RIGHT);
         tablad.setFont(tabla);
     }
