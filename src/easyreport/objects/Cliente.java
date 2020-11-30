@@ -23,6 +23,10 @@ public class Cliente {
 
     }
 
+    private String notNull(String var) {
+        return var != null ? var.trim() : "";
+    }
+
     public Cliente(String nombre, String codigo, String direccion) {
         this.nombre = nombre;
         this.codigo = codigo;
@@ -93,49 +97,45 @@ public class Cliente {
         this.nit = notNull(nit);
     }
 
-    private String notNull(String var) {
-        return var != null ? var.trim() : "";
-    }
-
     /**
      * @return the banco
      */
     public String getBanco() {
-        return banco;
+        return notNull(banco);
     }
 
     /**
      * @return the tipoCuenta
      */
     public String getTipoCuenta() {
-        return tipoCuenta;
+        return notNull(tipoCuenta);
     }
 
     /**
      * @return the noCuenta
      */
     public String getNoCuenta() {
-        return noCuenta;
+        return notNull(noCuenta);
     }
 
     /**
      * @param banco the banco to set
      */
     public void setBanco(String banco) {
-        this.banco = banco;
+        this.banco = notNull(banco);
     }
 
     /**
      * @param tipoCuenta the tipoCuenta to set
      */
     public void setTipoCuenta(String tipoCuenta) {
-        this.tipoCuenta = tipoCuenta;
+        this.tipoCuenta = notNull(tipoCuenta);
     }
 
     /**
      * @param noCuenta the noCuenta to set
      */
     public void setNoCuenta(String noCuenta) {
-        this.noCuenta = noCuenta;
+        this.noCuenta = notNull(noCuenta);
     }
 }

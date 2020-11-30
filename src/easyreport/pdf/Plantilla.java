@@ -194,7 +194,7 @@ public class Plantilla {
     }
 
     public PdfPTable getEncabezado() throws Exception {
-        PdfPTable table = new PdfPTable(2);
+        PdfPTable table = new PdfPTable(3);
         table.setWidthPercentage(99);
         table.setSpacingAfter(40f);
         PdfPCell cEncabezado = new PdfPCell();
@@ -204,9 +204,9 @@ public class Plantilla {
         cEncabezado.addElement(new Chunk("Transporte, Empaque y Almacenaje, S.A.", normalFontTitleBig));
         PdfPCell cFecha = new PdfPCell();
         cFecha.setBorder(0);
-        cFecha.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cFecha.setColspan(2);
-        cFecha.addElement(new Chunk("Fecha: " + titleFechora.replace(" ", " Hora: "), normalFontTitleMedium));
+        cFecha.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        cFecha.setColspan(1);
+        cFecha.addElement(new Chunk("Emisión: " + titleFechora.replace(" ", " Hora: "), normalFontTitleMedium));
         table.addCell(cEncabezado);
         table.addCell(cFecha);
         return table;

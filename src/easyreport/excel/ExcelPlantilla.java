@@ -123,17 +123,17 @@ public class ExcelPlantilla {
             HSSFSheet sheet = wb.createSheet(subTitulo != null && !subTitulo.isEmpty() ? subTitulo : titulo);
             sheet.setDisplayGridlines(false);
             ExcelUtils.nuevaCelda(0, 0, "Transporte, Empaque y Almacenaje, S.A.", sheet, encabe);
-            ExcelUtils.CombinarCentrar(0, 1, 0, 10, sheet, true);
+            ExcelUtils.CombinarCentrar(0, 1, 0, 10, sheet, false);
             ExcelUtils.nuevaCelda(2, 1, titulo, sheet, tituloStyle);
-            ExcelUtils.CombinarCentrar(2, 2, 1, 5, sheet, true);
+            ExcelUtils.CombinarCentrar(2, 2, 1, 6, sheet, false);
             ExcelUtils.nuevaCelda(3, 1, subTitulo, sheet, datCli);
-            ExcelUtils.CombinarCentrar(3, 3, 1, 4, sheet, true);
+            ExcelUtils.CombinarCentrar(3, 3, 1, 4, sheet, false);
             ExcelUtils.nuevaCelda(5, 1, "Fecha: " + this.fechora.replace(" ", "_Hora: "), sheet, datCli);
-            ExcelUtils.CombinarCentrar(5, 5, 1, 4, sheet, true);
-            getDefault_descripcionStyle().setWrapText(true);
-            getDefault_descripcionStyle().setVerticalAlignment(VerticalAlignment.TOP);
-            ExcelUtils.nuevaCelda(6, 1, descripcion, sheet, getDefault_descripcionStyle());
-            ExcelUtils.CombinarCentrar(6, 8, 1, 4, sheet, true);
+            ExcelUtils.CombinarCentrar(5, 5, 1, 5, sheet, false);
+//            getDefault_descripcionStyle().setWrapText(true);
+//            getDefault_descripcionStyle().setVerticalAlignment(VerticalAlignment.TOP);
+//            ExcelUtils.nuevaCelda(6, 1, descripcion, sheet, getDefault_descripcionStyle());
+//            ExcelUtils.CombinarCentrar(6, 8, 1, 5, sheet, true);
             addImage(wb, sheet);
             System.out.println("ReporteCreado");
             return sheet;
@@ -197,7 +197,7 @@ public class ExcelPlantilla {
 
     private void addImage(HSSFWorkbook workbook, Sheet sheet) {
         try {
-            InputStream input = new FileInputStream("C:/TEMPORAL/imagenes/Guatex2.jpg");
+            InputStream input = new FileInputStream("src/com/guatex/proyectobase/imagenes/Guatex2.jpg");
             byte[] imageInByte = IOUtils.toByteArray(input);
             int pictureIdx = workbook.addPicture(imageInByte, Workbook.PICTURE_TYPE_PNG);
             input.close();
@@ -205,9 +205,9 @@ public class ExcelPlantilla {
             CreationHelper helper = workbook.getCreationHelper();
             Drawing drawing = sheet.createDrawingPatriarch();
             ClientAnchor anchor = helper.createClientAnchor();
-            anchor.setCol1(5);
-            anchor.setCol2(8);
-            anchor.setRow1(3);
+            anchor.setCol1(7);
+            anchor.setCol2(12);
+            anchor.setRow1(2);
             anchor.setRow2(7);
 
             Picture pict = drawing.createPicture(anchor, pictureIdx);
@@ -355,14 +355,14 @@ public class ExcelPlantilla {
         encabe.setFont(nomGuatex);
 
         //Titulo: Datos Bancarios
-        tituloStyle.setAlignment(HorizontalAlignment.CENTER);
+        tituloStyle.setAlignment(HorizontalAlignment.LEFT);
         tituloStyle.setFont(titdatBan);
-        tituloStyle.setBottomBorderColor(IndexedColors.CORAL.getIndex());
-        tituloStyle.setTopBorderColor(IndexedColors.CORAL.getIndex());
-        tituloStyle.setBorderBottom(BorderStyle.THIN);//
-        tituloStyle.setBorderTop(BorderStyle.THIN);
-        tituloStyle.setBorderLeft(BorderStyle.THIN);
-        tituloStyle.setBorderRight(BorderStyle.THIN);
+        //tituloStyle.setBottomBorderColor(IndexedColors.CORAL.getIndex());
+        //tituloStyle.setTopBorderColor(IndexedColors.CORAL.getIndex());
+        // tituloStyle.setBorderBottom(BorderStyle.THIN);//
+//        tituloStyle.setBorderTop(BorderStyle.THIN);
+//        tituloStyle.setBorderLeft(BorderStyle.THIN);
+//        tituloStyle.setBorderRight(BorderStyle.THIN);
         tituloStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 
         //Encabezados de tabla

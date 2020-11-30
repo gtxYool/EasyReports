@@ -83,7 +83,7 @@ public class OneTblStyle_ReportPDF extends Plantilla {
             document.add(new Paragraph(new Chunk(NEWLINE)));
             document.add(new Paragraph(new Chunk(NEWLINE)));
             document.add(getEncabezado());
-            Paragraph paragraph1 = new Paragraph(15f, tbl.getTitulo(), FontFactory.getFont("arial", "UTF-8", 14));
+            Paragraph paragraph1 = new Paragraph(  15f, tbl.getTitulo(), FontFactory.getFont("arial", "UTF-8", 14));
             paragraph1.setAlignment(Element.ALIGN_CENTER);
             paragraph1.setSpacingAfter(15);
             document.add(paragraph1);

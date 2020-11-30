@@ -43,7 +43,9 @@ public class Operation {
     public String getValor(String campo) {
         int index = getIndex(campo);
         if (index >= 0) {
-            return "" + getCampos().get(index).getValor();
+            String valor="" + getCampos().get(index).getValor();
+            System.out.println(valor);
+            return valor;
         }
         return "0";
     }
@@ -94,11 +96,11 @@ public class Operation {
         private Double valor = 0.0;
 
         public pair(String nombre) {
-            this.nombre = nombre;
+            this.nombre = nombre.trim();
         }
 
         public void setNombre(String nombre) {
-            this.nombre = nombre;
+            this.nombre = nombre.trim();
         }
 
         public void setValor(Double valor) {

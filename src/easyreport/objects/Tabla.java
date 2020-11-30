@@ -62,9 +62,11 @@ public class Tabla {
     public void addOperation(String campos) {
         addOperaciones(campos);
         for (String st : campos.split(",")) {
+            st = st.trim();
             for (EncabezadoColumna ec : getEncabezados()) {
                 if (ec.getAtributoName().equalsIgnoreCase(st)) {
                     ec.setOperar(true);
+                    ec.setTipOpe(1);
                     System.out.println(ec.getAtributoName() + " set suma true");
                 }
             }
@@ -79,6 +81,7 @@ public class Tabla {
     public void addOperation(String campos, int tipo) {
         addOperaciones(campos);
         for (String st : campos.split(",")) {
+            st = st.trim();
             for (EncabezadoColumna ec : getEncabezados()) {
                 if (ec.getAtributoName().equalsIgnoreCase(st)) {
                     ec.setTipOpe(tipo);
@@ -110,8 +113,8 @@ public class Tabla {
         List<EncabezadoColumna> cabeceras = new LinkedList<EncabezadoColumna>();
         if (encabezados.length == NombresDeAtributo.length) {
             for (int i = 0; i < encabezados.length; i++) {
-                String tituloCabecera = encabezados[i];
-                String atributoName = NombresDeAtributo[i];
+                String tituloCabecera = encabezados[i].trim();
+                String atributoName = NombresDeAtributo[i].trim();
                 cabeceras.add(new EncabezadoColumna(tituloCabecera, atributoName));
             }
             return cabeceras.size() > 0 ? cabeceras : null;
@@ -132,8 +135,8 @@ public class Tabla {
         List<EncabezadoColumna> cabeceras = new LinkedList<EncabezadoColumna>();
         if (encabezados.size() == NombresDeAtributo.size()) {
             for (int i = 0; i < encabezados.size(); i++) {
-                String tituloCabecera = encabezados.get(i);
-                String atributoName = NombresDeAtributo.get(i);
+                String tituloCabecera = encabezados.get(i).trim();
+                String atributoName = NombresDeAtributo.get(i).trim();
                 cabeceras.add(new EncabezadoColumna(tituloCabecera, atributoName));
             }
             return cabeceras.size() > 0 ? cabeceras : null;
