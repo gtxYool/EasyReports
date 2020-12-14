@@ -44,7 +44,7 @@ public class Operation {
         int index = getIndex(campo);
         if (index >= 0) {
             String valor="" + getCampos().get(index).getValor();
-            System.out.println(valor);
+           // System.out.println(valor);
             return valor;
         }
         return "0";
@@ -53,7 +53,7 @@ public class Operation {
     private int getIndex(String campo) {
         for (int i = 0; i < getCampos().size(); i++) {
             if (getCampos().get(i).getNombre().equalsIgnoreCase(campo)) {
-                System.out.println(getCampos().get(i).getNombre() + " en index: " + i);
+            //    System.out.println(getCampos().get(i).getNombre() + " en index: " + i);
                 return i;
             }
         }

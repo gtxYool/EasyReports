@@ -28,13 +28,22 @@ public class ExcelUtils {
         }
     }
 
-    public static void separator(int y1, int x1, int x2, Sheet hoja, Short color) {
+    public static void separatorH(int y1, int x1, int x2, Sheet hoja, Short color) {
         CellRangeAddress region = new CellRangeAddress(y1, y1, x1, x2);
         RegionUtil.setBorderBottom(BorderStyle.MEDIUM, region, hoja);
         if (color != null) {
             RegionUtil.setBottomBorderColor(color, region, hoja);
         }
     }
+
+    public static void separatorV(int firstRow,int lastRow, int firsCol, int lastCol, Sheet hoja, Short color) {
+        CellRangeAddress region = new CellRangeAddress(firstRow, lastRow, firsCol, lastCol);
+        RegionUtil.setBorderLeft(BorderStyle.MEDIUM, region, hoja);
+        if (color != null) {
+            RegionUtil.setBottomBorderColor(color, region, hoja);
+        }
+    }
+    
 
     public static Cell celdaUtil(int fila, int columna, String dato, Sheet hoja) {
         Row rw = hoja.createRow(fila);

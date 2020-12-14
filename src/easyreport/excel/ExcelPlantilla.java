@@ -50,23 +50,24 @@ public class ExcelPlantilla {
     protected HSSFCellStyle Default_encabezadoStyle;
     protected HSSFCellStyle Default_fechaStyle;
     protected HSSFCellStyle Default_descripcionStyle;
+    protected HSSFPalette paleta;
     private HSSFCellStyle Normi;
     private HSSFCellStyle Normi_BordeSimple;
     private HSSFCellStyle Sombreado_BlueBold18;
     private HSSFCellStyle Sombreado_WhiteBold16;
     private HSSFCellStyle WhiteBackground_Black_B18;
     private HSSFCellStyle WhiteBackground_Blue_B28;
-    CellStyle encabe;
-    CellStyle datCli;
-    CellStyle tablad;
-    CellStyle fechas;
-    CellStyle tituloE;
-    CellStyle tituloStyle;
-    CellStyle totalM;
-    CellStyle total;
-    CellStyle texto;
-    CellStyle Number;
-    CellStyle Moneda;
+    protected CellStyle encabe;
+    protected CellStyle datCli;
+    protected CellStyle tablad;
+    protected CellStyle fechas;
+    protected CellStyle tituloE;
+    protected CellStyle tituloStyle;
+    protected CellStyle totalM;
+    protected CellStyle total;
+    protected CellStyle texto;
+    protected CellStyle Number;
+    protected CellStyle Moneda;
     private HSSFFont Black16;
     private HSSFFont Black14;
     private HSSFFont Black12;
@@ -120,12 +121,14 @@ public class ExcelPlantilla {
      */
     protected Sheet CreateSheet(HSSFWorkbook wb) {
         try {
-            HSSFSheet sheet = wb.createSheet(subTitulo != null && !subTitulo.isEmpty() ? subTitulo : titulo);
+            String sheetName = descripcion != null && !descripcion.isEmpty() ? descripcion : subTitulo;
+            HSSFSheet sheet = wb
+                    .createSheet(sheetName != null && !sheetName.isEmpty() ? sheetName : titulo.replace("/", "-"));
             sheet.setDisplayGridlines(false);
             ExcelUtils.nuevaCelda(0, 0, "Transporte, Empaque y Almacenaje, S.A.", sheet, encabe);
-            ExcelUtils.CombinarCentrar(0, 1, 0, 10, sheet, false);
+            ExcelUtils.CombinarCentrar(0, 1, 0, 6, sheet, false);
             ExcelUtils.nuevaCelda(2, 1, titulo, sheet, tituloStyle);
-            ExcelUtils.CombinarCentrar(2, 2, 1, 6, sheet, false);
+            ExcelUtils.CombinarCentrar(2, 2, 1, 9, sheet, false);
             ExcelUtils.nuevaCelda(3, 1, subTitulo, sheet, datCli);
             ExcelUtils.CombinarCentrar(3, 3, 1, 4, sheet, false);
             ExcelUtils.nuevaCelda(5, 1, "Fecha: " + this.fechora.replace(" ", "_Hora: "), sheet, datCli);
@@ -154,8 +157,9 @@ public class ExcelPlantilla {
      */
     protected boolean CrearArchivoXLS(HSSFWorkbook workbook, String PATH, String nombreArchivo) {
         try {
+            String nombreA = nombreArchivo.replace(".xls", "");
             String fechora = this.fechora.replace(":", "-").replace(" ", "_T");
-            ruta = PATH + "\\" + nombreArchivo + "_" + fechora + ".xls";
+            ruta = PATH + "\\" + nombreA + "_" + fechora + ".xls";
             File dir = new File(PATH);
             if (!dir.exists()) {
                 dir.mkdirs();
@@ -197,7 +201,8 @@ public class ExcelPlantilla {
 
     private void addImage(HSSFWorkbook workbook, Sheet sheet) {
         try {
-            InputStream input = new FileInputStream("src/com/guatex/proyectobase/imagenes/Guatex2.jpg");
+            InputStream input = new FileInputStream("C:\\TEMPORAL\\imagenes\\Guatex2.jpg");
+            //InputStream input = new FileInputStream("src/com/guatex/proyectobase/imagenes/Guatex2.jpg");
             byte[] imageInByte = IOUtils.toByteArray(input);
             int pictureIdx = workbook.addPicture(imageInByte, Workbook.PICTURE_TYPE_PNG);
             input.close();
@@ -205,10 +210,10 @@ public class ExcelPlantilla {
             CreationHelper helper = workbook.getCreationHelper();
             Drawing drawing = sheet.createDrawingPatriarch();
             ClientAnchor anchor = helper.createClientAnchor();
-            anchor.setCol1(7);
-            anchor.setCol2(12);
-            anchor.setRow1(2);
-            anchor.setRow2(7);
+            anchor.setCol1(10);
+            anchor.setCol2(15);
+            anchor.setRow1(0);
+            anchor.setRow2(4);
 
             Picture pict = drawing.createPicture(anchor, pictureIdx);
             pict.resize(0.9, 1.6);
@@ -312,7 +317,7 @@ public class ExcelPlantilla {
         total = workbook.createCellStyle();
         Number = workbook.createCellStyle();
 
-        HSSFPalette paleta = workbook.getCustomPalette();
+        paleta = workbook.getCustomPalette();
         paleta.setColorAtIndex(IndexedColors.PINK.index, (byte) 128, (byte) 100, (byte) 162);
         paleta.setColorAtIndex(IndexedColors.AQUA.index, (byte) 31, (byte) 73, (byte) 125);
         paleta.setColorAtIndex(IndexedColors.BLUE.index, (byte) 79, (byte) 129, (byte) 189);
