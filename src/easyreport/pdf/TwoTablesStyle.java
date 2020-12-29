@@ -37,7 +37,6 @@ public class TwoTablesStyle extends Plantilla {
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-M-yyyy hh:mm:ss");
     private final String fechora = dtf.format(date).toString().trim();
     //private final String logoPath = "/var/lib/sacod_reportgenerator/Guatex2.jpg";
-    private final String logoPath = "C:\\TEMPORAL\\imagenes\\Guatex2.jpg";
     private String ruta = "";
     TableReport tbl;
 
@@ -67,7 +66,7 @@ public class TwoTablesStyle extends Plantilla {
             throws DocumentException, BadElementException, IOException, Exception {
         try {
             this.tbl = tbl;
-            Image logoGuatex = Image.getInstance(logoPath);
+            Image logoGuatex = Image.getInstance(Rutas.getLogo());
             logoGuatex.scalePercent(getScaler(document, logoGuatex));
             int width = 90;
             if (tbl.getEncabezados().size() < 8 || tbl2.getEncabezados().size() < 8) {

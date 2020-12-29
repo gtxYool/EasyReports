@@ -39,7 +39,6 @@ public class Table_PdfReport extends Plantilla {
     LocalDateTime date = java.time.LocalDateTime.now();
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-M-yyyy hh:mm:ss");
     private final String fechora = dtf.format(date).toString().trim();
-    private final String logoPath = "src\\com\\guatex\\proyectobase\\imagenes\\Guatex2.jpg";
     TableReport tbl;
 
     public Table_PdfReport(TableReport tbl, String PATH, String nombreArchivo) throws FileNotFoundException, DocumentException, Exception {
@@ -53,7 +52,7 @@ public class Table_PdfReport extends Plantilla {
         PdfWriter.getInstance(document, new FileOutputStream(ruta));
         document.open();
         
-        Image logoGuatex = Image.getInstance(logoPath);
+        Image logoGuatex = Image.getInstance(Rutas.getLogo());
         logoGuatex.setAbsolutePosition(350, 500);
         // logoGuatex.setAbsolutePosition(100.0f, 750.0f);
         logoGuatex.scalePercent(getScaler(document, logoGuatex));

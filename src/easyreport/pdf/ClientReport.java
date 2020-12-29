@@ -40,7 +40,6 @@ public class ClientReport extends Plantilla {
     LocalDateTime date = java.time.LocalDateTime.now();
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-M-yyyy hh:mm:ss");
     private final String fechora = dtf.format(date).toString().trim();
-    private final String logoPath = "C:\\TEMPORAL\\imagenes\\Guatex2.jpg";
     TableReport tbl;
     String ruta = "";
 
@@ -62,7 +61,7 @@ public class ClientReport extends Plantilla {
     public boolean create(TableReport tbl, Cliente cliente) throws DocumentException, BadElementException, IOException, Exception {
         try {
             this.tbl = tbl;
-            Image logoGuatex = Image.getInstance(logoPath);
+            Image logoGuatex = Image.getInstance(Rutas.getLogo());
             logoGuatex.scalePercent(getScaler(document, logoGuatex));
             int width = 70;
             if (tbl.getEncabezados().size() < 7) {
