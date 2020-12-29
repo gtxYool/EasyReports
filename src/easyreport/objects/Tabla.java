@@ -16,6 +16,9 @@ import org.json.JSONArray;
 import java.util.List;
 
 /**
+ * Clase encargada del mapear los objetos recibe un listado de objetos o un
+ * json con un array de objetos, genera un objeto tipo tabla donde sus columnas son sus atributos y sus
+ * filas los valores de dichos atributos de cada objeto
  *
  * @author DylanYool
  * @since 7 de septiembre, 2020.
@@ -25,6 +28,9 @@ import java.util.List;
  */
 public class Tabla {
 
+    /**
+     *
+     */
     private List<EncabezadoColumna> encabezados;
     private List<Fila> filas;
     private Operation operaciones;
@@ -74,8 +80,9 @@ public class Tabla {
     }
 
     /**
+     * Indica que campos deben irse sumando
      *
-     * @param campos
+     * @param campos {@code strg1,strg2,strg3,...strgn}
      * @param tipo 1=normal,2=moneda
      */
     public void addOperation(String campos, int tipo) {
@@ -101,6 +108,11 @@ public class Tabla {
         return "";
     }
 
+    /**
+     *
+     * @param encabezados lista de atributos a
+     * @return
+     */
     private List<EncabezadoColumna> generarEncabezados(String[] encabezados) {
         List<EncabezadoColumna> cabeceras = new LinkedList<EncabezadoColumna>();
         for (String c : encabezados) {
@@ -144,7 +156,11 @@ public class Tabla {
             return generarEncabezados(encabezados);
         }
     }
-
+/**
+ * 
+ * @param objetos
+ * @return 
+ */
     private List<EncabezadoColumna> generarEncabezadosO(List<Object> objetos) {
         List<EncabezadoColumna> cabeceras = new LinkedList<EncabezadoColumna>();
         Field[] atributos = null;
@@ -157,7 +173,11 @@ public class Tabla {
         }
         return cabeceras.size() > 0 ? cabeceras : null;
     }
-
+/**
+ * 
+ * @param objetos
+ * @return 
+ */
     private List<Fila> generarFilas(List<Object> objetos) {
         List<Fila> filas = new LinkedList<Fila>();
         if (objetos != null) {
@@ -167,7 +187,11 @@ public class Tabla {
         }
         return filas.size() > 0 ? filas : null;
     }
-
+/**
+ * 
+ * @param jsonObject
+ * @return 
+ */
     private List<Fila> generarFilas(String jsonObject) {
         List<Fila> filas = new LinkedList<Fila>();
         JSONArray jsonarray = new JSONArray(jsonObject);
