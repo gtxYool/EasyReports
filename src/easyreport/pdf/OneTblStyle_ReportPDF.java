@@ -48,7 +48,7 @@ public class OneTblStyle_ReportPDF extends Plantilla {
             String fechora = this.fechora.replace(":", "").replace(" ", "_T");
             // String ruta = PATH + "/" + nombreArchivo + fechora+ ".pdf";
 
-            ruta = PATH + "\\" + nombreArchivo + fechora + ".pdf";
+            ruta = PATH + "/" + nombreArchivo + fechora + ".pdf";
             System.out.println(ruta);
             File file = new File(ruta);
             file.getParentFile().mkdirs();
