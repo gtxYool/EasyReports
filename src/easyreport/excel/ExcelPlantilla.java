@@ -27,8 +27,8 @@ import java.time.format.DateTimeFormatter;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Font;
 import java.io.FileNotFoundException;
+import easyreport.Management.Rutas;
 import org.apache.poi.util.IOUtils;
-import easyreport.excel.ExcelUtils;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.time.LocalDateTime;
@@ -100,7 +100,7 @@ public class ExcelPlantilla {
      *
      * @param wb WorkBook
      * @param titulo titulo de la nueva hoja
-     * @param subTitulo subtitulo para el reporte
+     * @param subtitulo subtitulo para el reporte
      * @param descripcion descripcion del reporte
      * @return HSSFSheet sheet
      *
@@ -199,9 +199,14 @@ public class ExcelPlantilla {
 
     }
 
+    /**
+     *
+     * @param workbook
+     * @param sheet
+     */
     private void addImage(HSSFWorkbook workbook, Sheet sheet) {
         try {
-            InputStream input = new FileInputStream("C:\\TEMPORAL\\imagenes\\Guatex2.jpg");
+            InputStream input = new FileInputStream(Rutas.getLogo());
             //InputStream input = new FileInputStream("src/com/guatex/proyectobase/imagenes/Guatex2.jpg");
             byte[] imageInByte = IOUtils.toByteArray(input);
             int pictureIdx = workbook.addPicture(imageInByte, Workbook.PICTURE_TYPE_PNG);
@@ -222,6 +227,10 @@ public class ExcelPlantilla {
         }
     }
 
+    /**
+     *
+     * @param workbook
+     */
     private void InitFonts(HSSFWorkbook workbook) { // metodo que inician las fuentes
         setBlack16(workbook.createFont());
         getBlack16().setFontHeight((short) (16 * 20));
@@ -260,6 +269,10 @@ public class ExcelPlantilla {
         getBlack_B18().setColor(HSSFColor.HSSFColorPredefined.BLACK.getIndex());
     }
 
+    /**
+     *
+     * @param workbook
+     */
     private void InitStyles(HSSFWorkbook workbook) { // metodo que inicia los estilos
 
         InitFonts(workbook); // ejecuta el metodo para iniciar fuentes

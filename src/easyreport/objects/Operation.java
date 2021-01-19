@@ -5,14 +5,14 @@
  */
 package easyreport.objects;
 
-import java.util.List;
+import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
- * @author AHERNANDEZ
+ * @author DYOOL
  */
 public class Operation {
 
@@ -22,16 +22,29 @@ public class Operation {
     public Operation() {
     }
 
+    /**
+     *
+     * @param campos los campos a operar
+     */
     public Operation(String[] campos) {
         setCampos(new ArrayList<>(Arrays.asList(campos)));
     }
 
+    /**
+     *
+     * @param campos los campos a operar
+     */
     public void addCampos(String[] campos) {
         for (String g : campos) {
             getCampos().add(new pair(g));
         }
     }
 
+    /**
+     *
+     * @param campo el campo a operar
+     * @param valor el valor a sumar
+     */
     public void add(String campo, double valor) {
         int index = getIndex(campo);
         if (index >= 0) {
@@ -40,20 +53,30 @@ public class Operation {
         }
     }
 
+    /**
+     *
+     * @param campo el campo a consultar
+     * @return String Valor almacenado en el campo
+     */
     public String getValor(String campo) {
         int index = getIndex(campo);
         if (index >= 0) {
-            String valor="" + getCampos().get(index).getValor();
-           // System.out.println(valor);
+            String valor = "" + getCampos().get(index).getValor();
+            // System.out.println(valor);
             return valor;
         }
         return "0";
     }
 
+    /**
+     *
+     * @param campo campo a buscar
+     * @return int index del campo si existe -1 sino existe
+     */
     private int getIndex(String campo) {
         for (int i = 0; i < getCampos().size(); i++) {
             if (getCampos().get(i).getNombre().equalsIgnoreCase(campo)) {
-            //    System.out.println(getCampos().get(i).getNombre() + " en index: " + i);
+                //    System.out.println(getCampos().get(i).getNombre() + " en index: " + i);
                 return i;
             }
         }
@@ -90,6 +113,9 @@ public class Operation {
         this.suma = suma;
     }
 
+    /**
+     *
+     */
     private class pair {
 
         private String nombre = "";

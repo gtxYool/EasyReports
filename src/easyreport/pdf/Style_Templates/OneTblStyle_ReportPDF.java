@@ -3,72 +3,92 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package easyreport.pdf;
+package easyreport.pdf.Style_Templates;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-import easyreport.TableReport;
-import easyreport.objects.Cliente;
 import com.itextpdf.text.BadElementException;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
-import java.awt.Desktop;
+import java.io.FileNotFoundException;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import easyreport.Management.Rutas;
+import com.itextpdf.text.Document;
+import easyreport.objects.Cliente;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Element;
+import easyreport.pdf.Plantilla;
+import java.io.FileOutputStream;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Image;
+import easyreport.TableReport;
+import java.io.IOException;
+import java.io.File;
 
 /**
  *
- * @author AHERNANDEZ
+ * @author DYOOL
  */
 public class OneTblStyle_ReportPDF extends Plantilla {
 
     private static Document document;
-    LocalDateTime date = java.time.LocalDateTime.now();
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-M-yyyy hh:mm:ss");
-    private final String fechora = dtf.format(date).toString().trim();
-    //private final String logoPath = "/var/lib/sacod_reportgenerator/Guatex2.jpg";
-    private final String logoPath = "C:\\TEMPORAL\\imagenes\\Guatex2.jpg";
     private String ruta = "";
     TableReport tbl;
 
+    /**
+     * Constructor de documento
+     *
+     * @param PATH ruta donde se guardará el archivo
+     * @param nombreArchivo nombre que tendra el archivo
+     * @throws DocumentException error en el Documento
+     * @throws FileNotFoundException error con la ruta
+     * @throws Exception error
+     */
     public OneTblStyle_ReportPDF(String PATH, String nombreArchivo)
             throws FileNotFoundException, DocumentException, Exception {
         try {
             document = new Document(PageSize.A4.rotate(), 0, 0, 0, 0);
             document.setMargins(10, 10, 20, 10);
-            String fechora = this.fechora.replace(":", "").replace(" ", "_T");
-            // String ruta = PATH + "/" + nombreArchivo + fechora+ ".pdf";
-
-            ruta = PATH + "\\" + nombreArchivo + fechora + ".pdf";
+            //devuelve la ruta dependiendo el sistema operativo y elimina el .pdf por si lo trajese
+            ruta = Rutas.getRuta(PATH, nombreArchivo);
             System.out.println(ruta);
             File file = new File(ruta);
             file.getParentFile().mkdirs();
             PdfWriter.getInstance(document, new FileOutputStream(ruta));
         } catch (Exception e) {
-            System.err.println("Algo salio mal creando el archivo... err: " + e.getMessage());
+            System.err.println("Algo salio mal creando el archivo... err: " + e);
+            throw e;
         }
     }
 
+    /**
+     * Crea el documento
+     *
+     * @param tbl objeto tabla que contien la información
+     * @return true si el archivo se creó con exito
+     * @throws IOException error con la ruta o la imagen
+     * @throws Exception error al escalar la imagen
+     */
     public boolean create(TableReport tbl) throws IOException, Exception {
         return create(tbl, null);
     }
 
+    /**
+     * Crea el documento
+     *
+     * @param tbl objeto tabla que contien la información
+     * @param cliente objeto cliente que contiene la informacion para el
+     * encabezado del reporte
+     * @return true si el archivo se creó con exito
+     * @throws DocumentException error en el Documento
+     * @throws BadElementException error con la ruta o la imagen
+     * @throws IOException error con la ruta o la imagen
+     * @throws Exception error al escalar la imagen
+     */
     public boolean create(TableReport tbl, Cliente cliente)
             throws DocumentException, BadElementException, IOException, Exception {
         try {
             this.tbl = tbl;
-            Image logoGuatex = Image.getInstance(logoPath);
-            logoGuatex.scalePercent(getScaler(document, logoGuatex));
+            Image logoGuatex = getImage(Rutas.getLogo(), document);
             int width = 90;
             if (tbl.getEncabezados().size() < 8) {
                 document.setPageSize(PageSize.LETTER);
@@ -83,7 +103,7 @@ public class OneTblStyle_ReportPDF extends Plantilla {
             document.add(new Paragraph(new Chunk(NEWLINE)));
             document.add(new Paragraph(new Chunk(NEWLINE)));
             document.add(getEncabezado());
-            Paragraph paragraph1 = new Paragraph(  15f, tbl.getTitulo(), FontFactory.getFont("arial", "UTF-8", 14));
+            Paragraph paragraph1 = new Paragraph(15f, tbl.getTitulo(), FontFactory.getFont("arial", "UTF-8", 14));
             paragraph1.setAlignment(Element.ALIGN_CENTER);
             paragraph1.setSpacingAfter(15);
             document.add(paragraph1);
@@ -103,31 +123,28 @@ public class OneTblStyle_ReportPDF extends Plantilla {
             }
             return true;
         } catch (Exception e) {
-            System.err.println("algo malio sal... err: " + e.getMessage());
             e.printStackTrace();
-            return false;
+            throw e;
         } finally {
             document.close();
             System.out.println("Cerrando el documento.");
         }
     }
 
+    /**
+     * Abre el archivo segun la ruta especificada
+     *
+     * @return true if the archive have been open
+     */
     public boolean AbrirArchivo() {
-        try {
-            File path = new File(ruta);
-            Desktop.getDesktop().open(path);
-            return true;
-        } catch (IOException ex) {
-            System.err.println("Algo salio mal intentando abrir el reporte. Err:" + ex.getMessage());
-            ex.printStackTrace();
-            return false;
-        }
-
+        return AbrirArchivo(ruta);
     }
 
-    private float getScaler(Document document, Image image) throws Exception {
-        float scaler = ((document.getPageSize().getWidth() - document.leftMargin() + 10 - document.rightMargin() - 0)
-                / image.getWidth()) * 14;
-        return scaler;
+    /**
+     *
+     * @return the ruta
+     */
+    public String getRuta() {
+        return this.ruta;
     }
 }

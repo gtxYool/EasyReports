@@ -5,44 +5,28 @@
  */
 package easyreport.pdf;
 
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.GrayColor;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.GrayColor;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import easyreport.objects.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Font;
 import java.text.NumberFormat;
+import easyreport.objects.*;
 
 /**
  *
- * @author AHERNANDEZ
+ * @author DYOOL
  */
-public class Plantilla {
+public class Plantilla extends Pdf_Utils {
 
-    LocalDateTime date = java.time.LocalDateTime.now();
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-    DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-    private final String fechora = dtf.format(date).toString().trim();
-    private final String titleFechora = dtf2.format(date).toString().trim();
-    private final Font normalFontSmall = FontFactory.getFont("Arial", BaseFont.IDENTITY_H, 8, Font.ITALIC);
-    private final Font boldFontNormal = FontFactory.getFont("Arial", BaseFont.IDENTITY_H, 5, Font.BOLD);
     private final Font normalFontTitle = FontFactory.getFont("Arial", BaseFont.IDENTITY_H, 4, Font.BOLDITALIC);
-    private final Font boldFontTitle = FontFactory.getFont("Arial", BaseFont.IDENTITY_H, 7, Font.BOLD, BaseColor.BLACK);
-    private final Font boldFontTitleBig = FontFactory.getFont("Arial", BaseFont.IDENTITY_H, 15, Font.BOLD);
-    private final Font normalFontTitleBig = FontFactory.getFont("Arial", BaseFont.IDENTITY_H, 12, Font.NORMAL);
-    private final Font normalFontTitleMedium = FontFactory.getFont("Arial", BaseFont.IDENTITY_H, 10, Font.NORMAL);
-    protected final String NEWLINE = "\n";
-    protected final String BLANK_SPACE = "\n\n";
+    private final Font boldFontNormal = FontFactory.getFont("Arial", BaseFont.IDENTITY_H, 5, Font.BOLD);
     private int numcol = 0;
-    protected int indent = 15;
     NumberFormat nf = NumberFormat.getInstance();
 
     public Plantilla() {
@@ -50,7 +34,16 @@ public class Plantilla {
         nf.setMinimumFractionDigits(2);
     }
 
-    public PdfPTable getResumen(Tabla tbl, int width) throws Exception {
+    /**
+     * Genera un encabezado con el nombre de las columanas y la sumatoria de las
+     * marcadas para ser sumadas
+     *
+     * @param tbl tabla
+     * @param width porcentaje de la hoja a ocupar en su ancho
+     * @return PdfTable tabla
+     * @see com.itextpdf.text.pdf.PdfPTable
+     */
+    public PdfPTable getResumen(Tabla tbl, int width) {
         PdfPTable table = new PdfPTable(tbl.getEncabezados().size());
         for (EncabezadoColumna ec : tbl.getEncabezados()) {
             PdfPCell cTempEtiqueta = new PdfPCell();
@@ -93,15 +86,21 @@ public class Plantilla {
         return table;
     }
 
+    /**
+     * Crea una PdfPTable a partir del objeto tabla
+     *
+     * @param tbl objet tabla con la informacion a imprimir
+     * @param width tamaño de la hoja a ocupar
+     * @return PdfPTable tabla con la informacion proporcionada
+     * @throws Exception si la tbl es null
+     */
     public PdfPTable createTable(Tabla tbl, int width) throws Exception {
 
         PdfPTable table = new PdfPTable(tbl.getEncabezados().size());
         table.setWidthPercentage(width);
         table.setSpacingAfter(20f);
-        float fntSize, lineSpacing;
+        float fntSize;
         fntSize = 7f;
-        lineSpacing = 8f;
-        int i = 1;
         numcol = tbl.getEncabezados().size();
         for (EncabezadoColumna ec : tbl.getEncabezados()) {
             PdfPCell cellValue = new PdfPCell();
@@ -141,7 +140,15 @@ public class Plantilla {
         return table;
     }
 
-    public PdfPTable getInfo(Cliente cliente) throws Exception {
+    /**
+     * Genera una tabla con la información del cliente
+     *
+     * @param cliente objeto cliente con la información de aquien va dirigido el
+     * reporte
+     * @return PdfTable
+     * @throws NullPointerException si el cliente es null
+     */
+    public PdfPTable getInfo(Cliente cliente) throws NullPointerException {
         PdfPTable table = new PdfPTable(5);
         table.setWidthPercentage(90);
 
@@ -193,7 +200,13 @@ public class Plantilla {
         return table;
     }
 
-    public PdfPTable getEncabezado() throws Exception {
+    /**
+     * Genera un encabezado con el nombre de la empresa y fecha y hora de
+     * emision
+     *
+     * @return PdfTable encabezado
+     */
+    public PdfPTable getEncabezado() {
         PdfPTable table = new PdfPTable(3);
         table.setWidthPercentage(99);
         table.setSpacingAfter(40f);

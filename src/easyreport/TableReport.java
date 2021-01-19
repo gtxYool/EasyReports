@@ -110,7 +110,7 @@ public class TableReport extends Tabla {
      * @param atributos listado de atributos asociados a dichas columnas(si el
      * objeto no cuenta con atributo con dicho nombre quedará vacia la celda al
      * momento de llenar la tabla)
-     * @param objetos listado de objetos a reportar.
+     * @param JsonObjects listado de objetos a reportar.
      * @param titulo titulo que se mostrará al inicio del reporte.
      *
      */
@@ -129,8 +129,9 @@ public class TableReport extends Tabla {
      * @param atributos listado de atributos asociados a dichas columnas(si el
      * objeto no cuenta con atributo con dicho nombre quedará vacia la celda al
      * momento de llenar la tabla)
-     * @param objetos listado de objetos a reportar.
+     * @param JsonObjects listado de objetos a reportar.
      * @param titulo titulo que se mostrará al inicio del reporte.
+     * @param subtitulo titulo que se mostrará al inicio del reporte.
      *
      */
     public TableReport(String[] encabezado, String[] atributos, String JsonObjects, String titulo, String subtitulo) {

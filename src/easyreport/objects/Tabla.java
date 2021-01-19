@@ -5,20 +5,16 @@
  */
 package easyreport.objects;
 
-import easyreport.objects.EncabezadoColumna;
-import easyreport.objects.Operation;
-import easyreport.objects.Fila;
 import java.lang.reflect.Field;
-import java.util.Collections;
 import java.util.LinkedList;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import java.util.List;
 
 /**
- * Clase encargada del mapear los objetos recibe un listado de objetos o un
- * json con un array de objetos, genera un objeto tipo tabla donde sus columnas son sus atributos y sus
- * filas los valores de dichos atributos de cada objeto
+ * Clase encargada del mapear los objetos recibe un listado de objetos o un json
+ * con un array de objetos, genera un objeto tipo tabla donde sus columnas son
+ * sus atributos y sus filas los valores de dichos atributos de cada objeto
  *
  * @author DylanYool
  * @since 7 de septiembre, 2020.
@@ -65,6 +61,11 @@ public class Tabla {
         this.filas = generarFilas(objetos);
     }
 
+    /**
+     * Agrega campos que deben ser operados
+     *
+     * @param campos campos concatenados y separadados por ','(coma)
+     */
     public void addOperation(String campos) {
         addOperaciones(campos);
         for (String st : campos.split(",")) {
@@ -99,6 +100,12 @@ public class Tabla {
         }
     }
 
+    /**
+     * busca el nombre de la columna asociadco al atributo
+     *
+     * @param atributoName nombre del atributo asociado a la columna
+     * @return String nombre de columna si existe, String vacio sino.
+     */
     public String SearchColumnName(String atributoName) {
         for (EncabezadoColumna ec : encabezados) {
             if (ec.getAtributoName().equalsIgnoreCase(atributoName)) {
@@ -109,9 +116,12 @@ public class Tabla {
     }
 
     /**
+     * Genera los encabezados de las columnas
      *
-     * @param encabezados lista de atributos a
-     * @return
+     * @param encabezados lista de atributos a mapear
+     * @return lista de objetos encabezados
+     * @see easyreport.objects.EncabezadoColumna
+     * @see java.util.List
      */
     private List<EncabezadoColumna> generarEncabezados(String[] encabezados) {
         List<EncabezadoColumna> cabeceras = new LinkedList<EncabezadoColumna>();
@@ -121,6 +131,16 @@ public class Tabla {
         return cabeceras.size() > 0 ? cabeceras : null;
     }
 
+    /**
+     * Genera el listado de encabezados para la tabla las columnas y los
+     * atributos deben llegar en el mismo orden, ya que se asocian 1 a 1.
+     *
+     * @param encabezados nombre asociado a las columnas
+     * @param NombresDeAtributo atributos asociados a las respectivas columnas
+     * @return listado de encabezados
+     * @see easyreport.objects.EncabezadoColumna
+     * @see java.util.List
+     */
     private List<EncabezadoColumna> generarEncabezados(String[] encabezados, String[] NombresDeAtributo) {
         List<EncabezadoColumna> cabeceras = new LinkedList<EncabezadoColumna>();
         if (encabezados.length == NombresDeAtributo.length) {
@@ -135,6 +155,14 @@ public class Tabla {
         }
     }
 
+    /**
+     * Genera los encabezados de las columnas
+     *
+     * @param encabezados lista de atributos a mapear
+     * @return lista de objetos encabezados
+     * @see easyreport.objects.EncabezadoColumna
+     * @see java.util.List
+     */
     private List<EncabezadoColumna> generarEncabezados(List<String> encabezados) {
         List<EncabezadoColumna> cabeceras = new LinkedList<EncabezadoColumna>();
         for (String c : encabezados) {
@@ -143,6 +171,16 @@ public class Tabla {
         return cabeceras.size() > 0 ? cabeceras : null;
     }
 
+    /**
+     * Genera el listado de encabezados para la tabla las columnas y los
+     * atributos deben llegar en el mismo orden, ya que se asocian 1 a 1.
+     *
+     * @param encabezados nombre asociado a las columnas
+     * @param NombresDeAtributo atributos asociados a las respectivas columnas
+     * @return listado de encabezados
+     * @see easyreport.objects.EncabezadoColumna
+     * @see java.util.List
+     */
     private List<EncabezadoColumna> generarEncabezados(List<String> encabezados, List<String> NombresDeAtributo) {
         List<EncabezadoColumna> cabeceras = new LinkedList<EncabezadoColumna>();
         if (encabezados.size() == NombresDeAtributo.size()) {
@@ -156,11 +194,15 @@ public class Tabla {
             return generarEncabezados(encabezados);
         }
     }
-/**
- * 
- * @param objetos
- * @return 
- */
+
+    /**
+     * Genera un listado de encabezados con base en el objeto de la lista
+     *
+     * @param objetos listado de objetos a mapear
+     * @return listado de encabezados
+     * @see easyreport.objects.EncabezadoColumna
+     * @see java.util.List
+     */
     private List<EncabezadoColumna> generarEncabezadosO(List<Object> objetos) {
         List<EncabezadoColumna> cabeceras = new LinkedList<EncabezadoColumna>();
         Field[] atributos = null;
@@ -173,11 +215,17 @@ public class Tabla {
         }
         return cabeceras.size() > 0 ? cabeceras : null;
     }
-/**
- * 
- * @param objetos
- * @return 
- */
+
+    /**
+     * Convierte un listado de objetos a un listado de filas para acceder a sus
+     * atributos
+     *
+     * @param objetos listado de objetos a mapear
+     * @return listado de filas
+     * @see easyreport.objects.Fila
+     * @see java.util.List
+     *
+     */
     private List<Fila> generarFilas(List<Object> objetos) {
         List<Fila> filas = new LinkedList<Fila>();
         if (objetos != null) {
@@ -187,11 +235,16 @@ public class Tabla {
         }
         return filas.size() > 0 ? filas : null;
     }
-/**
- * 
- * @param jsonObject
- * @return 
- */
+
+    /**
+     * Convierte un String con formato de JsonArray a un listado de filas para
+     * acceder a sus atributos
+     *
+     * @param objetos String con formato JSONArray con los objetos a mapear
+     * @return listado de filas
+     * @see easyreport.objects.Fila
+     * @see java.util.List
+     */
     private List<Fila> generarFilas(String jsonObject) {
         List<Fila> filas = new LinkedList<Fila>();
         JSONArray jsonarray = new JSONArray(jsonObject);
@@ -238,7 +291,7 @@ public class Tabla {
     }
 
     /**
-     * @param operaciones the operaciones to set
+     * @param campos the operaciones to set
      */
     public void addOperaciones(String campos) {
         if (this.operaciones == null) {

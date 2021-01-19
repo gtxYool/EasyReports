@@ -6,8 +6,6 @@
 package easyreport.objects;
 
 import easyreport.objects.Celda;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 import org.json.JSONObject;

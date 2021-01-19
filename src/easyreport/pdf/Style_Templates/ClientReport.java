@@ -3,67 +3,75 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package easyreport.pdf;
+package easyreport.pdf.Style_Templates;
 
 import com.itextpdf.text.BadElementException;
-import easyreport.pdf.*;
-import easyreport.objects.*;
-
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import easyreport.TableReport;
-import java.awt.Desktop;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import com.itextpdf.text.FontFactory;
 import java.io.FileNotFoundException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-import org.json.JSONArray;
+import com.itextpdf.text.Paragraph;
+import easyreport.Management.Rutas;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import java.io.FileOutputStream;
+import easyreport.pdf.Plantilla;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Image;
+import easyreport.TableReport;
+import easyreport.objects.*;
+import java.io.IOException;
+import java.io.File;
 
 /**
  *
- * @author AHERNANDEZ
+ * @author DYOOL
  */
 public class ClientReport extends Plantilla {
 
     private static Document document;
-    LocalDateTime date = java.time.LocalDateTime.now();
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-M-yyyy hh:mm:ss");
-    private final String fechora = dtf.format(date).toString().trim();
-    private final String logoPath = "C:\\TEMPORAL\\imagenes\\Guatex2.jpg";
     TableReport tbl;
     String ruta = "";
 
+    /**
+     * Reporte
+     *
+     * @param PATH ruta donde se guardará el documento
+     * @param nombreArchivo nombre que tendrá el documento
+     * @throws FileNotFoundException el archivo no existe
+     * @throws DocumentException error en el documento
+     * @throws Exception exception
+     */
     public ClientReport(String PATH, String nombreArchivo) throws FileNotFoundException, DocumentException, Exception {
         document = new Document(PageSize.A4.rotate(), 0, 0, 0, 0);
         document.setMargins(10, 10, 20, 10);
-        String fechora = this.fechora.replace(":", "-").replace(" ", "_T");
-        ruta = PATH + "\\" + nombreArchivo + "_" + fechora + ".pdf";
+        ruta = Rutas.getRuta(PATH, nombreArchivo);
         System.out.println(ruta);
         File file = new File(ruta);
         try {
             file.getParentFile().mkdirs();
         } catch (Exception e) {
+            throw e;
         }
         PdfWriter.getInstance(document, new FileOutputStream(ruta));
-
     }
 
+    /**
+     * Crea el documento
+     *
+     * @param tbl objeto tabla que contiene los objetos
+     * @param cliente informacion del cliente para el encabezado del reporte
+     * @return true si el reporte fue creado correctamente
+     * @throws DocumentException error en el Documento
+     * @throws BadElementException error con la ruta o la imagen
+     * @throws IOException error con la ruta o la imagen
+     * @throws Exception error al escalar la imagen
+     */
     public boolean create(TableReport tbl, Cliente cliente) throws DocumentException, BadElementException, IOException, Exception {
         try {
             this.tbl = tbl;
-            Image logoGuatex = Image.getInstance(logoPath);
-            logoGuatex.scalePercent(getScaler(document, logoGuatex));
+            Image logoGuatex = getImage(Rutas.getLogo(), document);
             int width = 70;
             if (tbl.getEncabezados().size() < 7) {
                 document.setPageSize(PageSize.LETTER);
@@ -96,31 +104,29 @@ public class ClientReport extends Plantilla {
             }
             return true;
         } catch (Exception e) {
-            System.err.println("algo malio sal... err: " + e.getMessage());
             e.printStackTrace();
-            return false;
+            throw e;
         } finally {
             document.close();
             System.out.println("Cerrando el documento.");
         }
     }
 
-    private float getScaler(Document document, Image image) {
-        float scaler = ((document.getPageSize().getWidth() - document.leftMargin() + 10
-                - document.rightMargin() - 0) / image.getWidth()) * 14;
-        return scaler;
+    /**
+     * Abre el archivo en la ruta especificada
+     *
+     * @return true si pudo abrir el archivo
+     */
+    protected boolean AbrirArchivo() {
+        return AbrirArchivo(ruta);
     }
 
-    protected boolean AbrirArchivo() {
-        try {
-            File path = new File(ruta);
-            Desktop.getDesktop().open(path);
-            return true;
-        } catch (IOException ex) {
-            System.err.println("Algo salio mal intentando abrir el reporte. Err:" + ex.getMessage());
-            ex.printStackTrace();
-            return false;
-        }
-
+    /**
+     * Devuelve la ruta generada para el archivo
+     *
+     * @return the ruta
+     */
+    public String getRuta() {
+        return this.ruta;
     }
 }

@@ -5,7 +5,8 @@
  */
 package easyreport;
 
-import easyreport.excel.Table_ExcelReport;
+import easyreport.pdf.Style_Templates.OneTblStyle_ReportPDF;
+import easyreport.excel.Style_Templates.Table_ExcelReport;
 import easyreport.pdf.*;
 import easyreport.objects.Cliente;
 

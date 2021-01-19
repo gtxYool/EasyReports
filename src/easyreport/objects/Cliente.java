@@ -6,8 +6,8 @@
 package easyreport.objects;
 
 /**
- *
- * @author AHERNANDEZ
+ * 
+ * @author DYOOL
  */
 public class Cliente {
 

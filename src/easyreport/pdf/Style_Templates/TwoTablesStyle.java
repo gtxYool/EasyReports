@@ -3,72 +3,95 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package easyreport.pdf;
+package easyreport.pdf.Style_Templates;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-import easyreport.TableReport;
-import easyreport.objects.Cliente;
 import com.itextpdf.text.BadElementException;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
-import java.awt.Desktop;
+import java.io.FileNotFoundException;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import easyreport.Management.Rutas;
+import easyreport.objects.Cliente;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import easyreport.pdf.Plantilla;
+import java.io.FileOutputStream;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Image;
+import easyreport.TableReport;
+import java.io.IOException;
+import java.io.File;
 
 /**
  *
- * @author AHERNANDEZ
+ * @author DYOOL
  */
 public class TwoTablesStyle extends Plantilla {
 
     private static Document document;
-    LocalDateTime date = java.time.LocalDateTime.now();
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-M-yyyy hh:mm:ss");
-    private final String fechora = dtf.format(date).toString().trim();
-    //private final String logoPath = "/var/lib/sacod_reportgenerator/Guatex2.jpg";
-    private final String logoPath = "C:\\TEMPORAL\\imagenes\\Guatex2.jpg";
     private String ruta = "";
     TableReport tbl;
 
+    /**
+     * Reporte con información dividida en 2 tablas y un encabezado
+     *
+     * @param PATH ruta donde se guardará el documento
+     * @param nombreArchivo nombre que tendrá el documento
+     * @throws DocumentException error en el Documento
+     * @throws FileNotFoundException error con la ruta
+     * @throws Exception error al escalar la imagen
+     */
     public TwoTablesStyle(String PATH, String nombreArchivo)
             throws FileNotFoundException, DocumentException, Exception {
         try {
             document = new Document(PageSize.A4.rotate(), 0, 0, 0, 0);
             document.setMargins(10, 10, 20, 10);
-            String fechora = this.fechora.replace(":", "-").replace(" ", "_T");
-            // String ruta = PATH + "/" + nombreArchivo + fechora+ ".pdf";
-
-            ruta = PATH + "\\" + nombreArchivo + fechora + ".pdf";
+            ruta = Rutas.getRuta(PATH, nombreArchivo);
             System.out.println(ruta);
             File file = new File(ruta);
             file.getParentFile().mkdirs();
             PdfWriter.getInstance(document, new FileOutputStream(ruta));
         } catch (Exception e) {
             System.err.println("Algo salio mal creando el archivo... err: " + e.getMessage());
+            throw e;
         }
     }
 
+    /**
+     *
+     * Crea el documento
+     *
+     * @param tbl objeto tabla que contiene la información a escribir
+     * @param tbl2 2do objeto tabla que contiene la información a escribir
+     * @return true si el documento fue creado
+
+     * @throws FileNotFoundException error con la ruta
+     * @throws Exception error al escalar la imagen
+     */
     public boolean create(TableReport tbl, TableReport tbl2) throws IOException, Exception {
         return create(tbl, tbl2, null);
     }
 
+    /**
+     *
+     * Crea el documento
+     *
+     * @param tbl objeto tabla que contiene la información a escribir
+     * @param tbl2 2do objeto tabla que contiene la información a escribir
+     * @param cliente informacion del cliente para el encabezado del reporte
+     * @return true si el documento fue creado
+     * @throws DocumentException error en el Documento
+     * @throws BadElementException error con la ruta o la imagen
+     * @throws IOException error con la ruta o la imagen
+     * @throws Exception error al escalar la imagen
+     */
     public boolean create(TableReport tbl, TableReport tbl2, Cliente cliente)
             throws DocumentException, BadElementException, IOException, Exception {
         try {
             this.tbl = tbl;
-            Image logoGuatex = Image.getInstance(logoPath);
-            logoGuatex.scalePercent(getScaler(document, logoGuatex));
+            Image logoGuatex = getImage(Rutas.getLogo(), document);
             int width = 90;
             if (tbl.getEncabezados().size() < 8 || tbl2.getEncabezados().size() < 8) {
                 document.setPageSize(PageSize.LETTER);
@@ -114,29 +137,28 @@ public class TwoTablesStyle extends Plantilla {
         } catch (Exception e) {
             System.err.println("algo malio sal... err: " + e.getMessage());
             e.printStackTrace();
-            return false;
+            throw e;
         } finally {
             document.close();
             System.out.println("Cerrando el documento.");
         }
     }
 
+    /**
+     * Abre el archivo en la ruta especificada
+     *
+     * @return true si se pudo abrir el archivo
+     */
     public boolean AbrirArchivo() {
-        try {
-            File path = new File(ruta);
-            Desktop.getDesktop().open(path);
-            return true;
-        } catch (IOException ex) {
-            System.err.println("Algo salio mal intentando abrir el reporte. Err:" + ex.getMessage());
-            ex.printStackTrace();
-            return false;
-        }
-
+        return AbrirArchivo(ruta);
     }
 
-    private float getScaler(Document document, Image image) throws Exception {
-        float scaler = ((document.getPageSize().getWidth() - document.leftMargin() + 10 - document.rightMargin() - 0)
-                / image.getWidth()) * 14;
-        return scaler;
+    /**
+     * Devuelve la ruta generada para el archivo
+     *
+     * @return the ruta
+     */
+    public String getRuta() {
+        return this.ruta;
     }
 }

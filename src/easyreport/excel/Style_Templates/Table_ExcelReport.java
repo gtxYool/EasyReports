@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package easyreport.excel;
+package easyreport.excel.Style_Templates;
 
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
@@ -13,11 +13,11 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.CellStyle;
 import easyreport.objects.EncabezadoColumna;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Row;
 import easyreport.excel.ExcelPlantilla;
+import org.apache.poi.ss.usermodel.Row;
+import easyreport.excel.ExcelUtils;
 import easyreport.objects.Fila;
 import easyreport.TableReport;
-import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
 

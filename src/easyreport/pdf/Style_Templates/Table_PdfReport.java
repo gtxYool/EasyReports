@@ -3,60 +3,56 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package easyreport.pdf;
+package easyreport.pdf.Style_Templates;
 
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import easyreport.TableReport;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.List;
-import easyreport.objects.*;
 import java.io.FileNotFoundException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-import org.json.JSONArray;
+import easyreport.Management.Rutas;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.PageSize;
+import java.io.FileOutputStream;
+import easyreport.pdf.Plantilla;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Image;
+import easyreport.TableReport;
+import easyreport.objects.*;
+import java.io.File;
 
 /**
  *
- * @author AHERNANDEZ
+ * @author DYOOL
  */
 public class Table_PdfReport extends Plantilla {
 
     private static Document document;
-    LocalDateTime date = java.time.LocalDateTime.now();
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-M-yyyy hh:mm:ss");
-    private final String fechora = dtf.format(date).toString().trim();
-    private final String logoPath = "src\\com\\guatex\\proyectobase\\imagenes\\Guatex2.jpg";
     TableReport tbl;
 
+    /**
+     *
+     * @param tbl objeto tabla
+     * @param PATH ruta donde se guardara
+     * @param nombreArchivo nombre del archivo sin extension
+     * @throws DocumentException error en el Documento
+     * @throws FileNotFoundException error con la ruta
+     * @throws Exception error al escalar la imagen
+     */
     public Table_PdfReport(TableReport tbl, String PATH, String nombreArchivo) throws FileNotFoundException, DocumentException, Exception {
         document = new Document(PageSize.A4.rotate(), 0, 0, 0, 0);
         this.tbl = tbl;
-        String fechora = this.fechora.replace(":", "-").replace(" ", "_T");
-        String ruta = PATH + "\\" + nombreArchivo + "_" + fechora + ".pdf";
+        //devuelve la ruta dependiendo el sistema operativo y elimina el .pdf por si lo trajese
+        String ruta = Rutas.getRuta(PATH, nombreArchivo);
         System.out.println(ruta);
         File file = new File(ruta);
         //file.getParentFile().mkdirs();
         PdfWriter.getInstance(document, new FileOutputStream(ruta));
         document.open();
-        
-        Image logoGuatex = Image.getInstance(logoPath);
+
+        Image logoGuatex = getImage(Rutas.getLogo(), document);
         logoGuatex.setAbsolutePosition(350, 500);
-        // logoGuatex.setAbsolutePosition(100.0f, 750.0f);
-        logoGuatex.scalePercent(getScaler(document, logoGuatex));
+        // logoGuatex.setAbsolutePosition(100.0f, 750.0f);  
         document.add(new Paragraph(new Chunk(BLANK_SPACE)));
         document.add(new Paragraph(new Chunk(NEWLINE)));
         document.add(new Paragraph(new Chunk(NEWLINE)));
@@ -66,26 +62,31 @@ public class Table_PdfReport extends Plantilla {
         document.close();
     }
 
+    /**
+     *
+     * @param tbl objeto Tabla
+     * @throws Exception error al crear documento
+     */
     public void addTable(Tabla tbl) throws Exception {
         if (tbl != null) {
-            PdfPTable table = createTable(tbl,5);
+            PdfPTable table = createTable(tbl, 5);
             document.add(table);
         }
     }
 
+    /**
+     *
+     * @param campos campos a sumar
+     */
     public void addOperation(String campos) {
         tbl.addOperation(campos);
     }
-    
-  
 
+    /**
+     *
+     */
     public void CrearRepote() {
 
     }
 
-    private float getScaler(Document document, Image image) {
-        float scaler = ((document.getPageSize().getWidth() - document.leftMargin() + 10
-                - document.rightMargin() - 0) / image.getWidth()) * 15;
-        return scaler;
-    }
 }
