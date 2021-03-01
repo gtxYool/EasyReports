@@ -38,19 +38,6 @@ public class TableReport extends Tabla {
     /**
      * Crea un objeto TableReport
      *
-     * @param JsonObjects json de objetos a reportar.
-     * @param titulo titulo que se mostrará al inicio del reporte.
-     *
-     */
-//    public TableReport(String JsonObjects, String titulo) {
-//        this.tabla = new Tabla(JsonObjects);
-//        this.titulo = titulo;
-//        this.subTitulo = "";
-//        this.Descripcion = "";
-//    }
-    /**
-     * Crea un objeto TableReport
-     *
      * @param encabezado listado de nombres a mostrar en las columnas (si el
      * objeto no tiene un atributo con ese nombre se quedará vacia la celda al
      * momento de llenar la tabla.)

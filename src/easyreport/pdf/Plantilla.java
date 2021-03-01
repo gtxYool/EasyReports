@@ -207,8 +207,8 @@ public class Plantilla extends Pdf_Utils {
      * @return PdfTable encabezado
      */
     public PdfPTable getEncabezado() {
-        PdfPTable table = new PdfPTable(3);
-        table.setWidthPercentage(99);
+        PdfPTable table = new PdfPTable(4);
+        table.setWidthPercentage(90);
         table.setSpacingAfter(40f);
         PdfPCell cEncabezado = new PdfPCell();
         cEncabezado.setBorder(0);
@@ -218,7 +218,7 @@ public class Plantilla extends Pdf_Utils {
         PdfPCell cFecha = new PdfPCell();
         cFecha.setBorder(0);
         cFecha.setHorizontalAlignment(Element.ALIGN_RIGHT);
-        cFecha.setColspan(1);
+        cFecha.setColspan(2);
         cFecha.addElement(new Chunk("Emisión: " + titleFechora.replace(" ", " Hora: "), normalFontTitleMedium));
         table.addCell(cEncabezado);
         table.addCell(cFecha);

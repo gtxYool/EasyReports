@@ -121,7 +121,26 @@ public class Pdf_Utils {
         }
         return table;
     }
-
+    /**
+     * Crea una tabla sin bordes
+     *
+     * @param col número de columanas para la tabla
+     * @param porcentaje de la hoja a ocupar(width)
+     * @param datos datos a imprimir en la tabla
+     * @param style tipo de fuente
+     * @return PdfPTable getTablaNoBordes
+     */
+    public PdfPTable getTablaDTablas(int col, int porcentaje, List<PdfPTable> datos, Font style) {
+        PdfPTable table = new PdfPTable(col);
+        table.setWidthPercentage(porcentaje);
+        table.setSpacingAfter(15f);
+        for(PdfPTable g : datos) {
+            table.addCell(g);
+            System.out.println("agregando...");
+        }
+        return table;
+    }
+    
     /**
      * Crea un nuevo parrafo
      *
