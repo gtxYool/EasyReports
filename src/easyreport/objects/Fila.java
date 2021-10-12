@@ -5,14 +5,16 @@
  */
 package easyreport.objects;
 
-import easyreport.objects.Celda;
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import java.util.List;
+import org.json.JSONException;
 
 /**
+ * Cada objeto en el listado o en el JSONArray se convierte en un objeto Fila
+ * tras mapear su contenido
  *
  * @author DylanYool
  * @since 7 de septiembre, 2020.
@@ -27,19 +29,36 @@ public class Fila {
     Field[] atributos;
     private int altura;
 
+    /**
+     * Genera un objeto Fila tras mapear el Object
+     *
+     * @param object objeto a mapear
+     * @see java.lang.reflect.Field
+     */
     public Fila(Object object) {
-        celdas = new LinkedList<Celda>();
+        celdas = new LinkedList<>();
         atributos = object.getClass().getDeclaredFields();
         generarCeldas(object);
         altura = 0;
     }
 
+    /**
+     * Genera un objeto Fila tras mapear el JSONObject
+     *
+     * @param object objeto a mapear
+     * @see org.json.JSONObject
+     *
+     */
     public Fila(JSONObject object) {
-        celdas = new LinkedList<Celda>();
+        celdas = new LinkedList<>();
         generarCeldas(object);
         altura = 0;
     }
 
+    /**
+     *
+     * @param object
+     */
     private void generarCeldas(JSONObject object) {
         JSONArray jsonArray = object.names();
         int length = jsonArray.length();
@@ -50,12 +69,17 @@ public class Fila {
                 Celda nuevaCelda = new Celda(name, value);
                 celdas.add(nuevaCelda);
             }
-        } catch (Exception e) {
+        } catch (JSONException e) {
             System.err.println("algo salio mal generando las celdas desde el Json... err: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
+    /**
+     * Genera los objetos "Celda" que almacenaran la data de los atributos
+     *
+     * @param instancia
+     */
     private void generarCeldas(Object instancia) {
         try {
             for (Field cell : atributos) {
@@ -63,9 +87,7 @@ public class Fila {
                 nuevaCelda.setAtributoValue(instancia);
                 celdas.add(nuevaCelda);
             }
-        } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
-        } catch (IllegalAccessException ex) {
+        } catch (IllegalArgumentException | IllegalAccessException ex) {
             ex.printStackTrace();
         }
     }
@@ -78,6 +100,12 @@ public class Fila {
         return celdas;
     }
 
+    /**
+     * Retorna el valor asociado al atributo
+     *
+     * @param atributoName nombre del atributo
+     * @return valor del atributo
+     */
     public String findValue(String atributoName) {
         String value = "";
         for (Celda cel : celdas) {
@@ -89,12 +117,19 @@ public class Fila {
         return value != null ? value : "";
     }
 
+    /**
+     * Obtiene la representacion de tipo Double del atributo o 0 si falla la
+     * conversion
+     *
+     * @param atributoName nombre del atributo
+     * @return Double | 0.0
+     */
     public double getToDouble(String atributoName) {
         String value = findValue(atributoName);
         try {
             double valor = Double.valueOf(value);
             return valor;
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             return 0;
         }
 

@@ -21,6 +21,8 @@ import java.util.List;
  * @see java.lang.reflect.Field
  * @see java.util.List
  * @see java.util.LinkedList
+ * @see org.json.JSONArray
+ * @see org.json.JSONObject
  */
 public class Tabla {
 
@@ -124,7 +126,7 @@ public class Tabla {
      * @see java.util.List
      */
     private List<EncabezadoColumna> generarEncabezados(String[] encabezados) {
-        List<EncabezadoColumna> cabeceras = new LinkedList<EncabezadoColumna>();
+        List<EncabezadoColumna> cabeceras = new LinkedList<>();
         for (String c : encabezados) {
             cabeceras.add(new EncabezadoColumna(c));
         }
@@ -142,7 +144,7 @@ public class Tabla {
      * @see java.util.List
      */
     private List<EncabezadoColumna> generarEncabezados(String[] encabezados, String[] NombresDeAtributo) {
-        List<EncabezadoColumna> cabeceras = new LinkedList<EncabezadoColumna>();
+        List<EncabezadoColumna> cabeceras = new LinkedList<>();
         if (encabezados.length == NombresDeAtributo.length) {
             for (int i = 0; i < encabezados.length; i++) {
                 String tituloCabecera = encabezados[i].trim();
@@ -164,10 +166,10 @@ public class Tabla {
      * @see java.util.List
      */
     private List<EncabezadoColumna> generarEncabezados(List<String> encabezados) {
-        List<EncabezadoColumna> cabeceras = new LinkedList<EncabezadoColumna>();
-        for (String c : encabezados) {
+        List<EncabezadoColumna> cabeceras = new LinkedList<>();
+        encabezados.forEach((c) -> {
             cabeceras.add(new EncabezadoColumna(c));
-        }
+        });
         return cabeceras.size() > 0 ? cabeceras : null;
     }
 
@@ -182,7 +184,7 @@ public class Tabla {
      * @see java.util.List
      */
     private List<EncabezadoColumna> generarEncabezados(List<String> encabezados, List<String> NombresDeAtributo) {
-        List<EncabezadoColumna> cabeceras = new LinkedList<EncabezadoColumna>();
+        List<EncabezadoColumna> cabeceras = new LinkedList<>();
         if (encabezados.size() == NombresDeAtributo.size()) {
             for (int i = 0; i < encabezados.size(); i++) {
                 String tituloCabecera = encabezados.get(i).trim();
@@ -204,7 +206,7 @@ public class Tabla {
      * @see java.util.List
      */
     private List<EncabezadoColumna> generarEncabezadosO(List<Object> objetos) {
-        List<EncabezadoColumna> cabeceras = new LinkedList<EncabezadoColumna>();
+        List<EncabezadoColumna> cabeceras = new LinkedList<>();
         Field[] atributos = null;
         if (objetos.size() > 0) {
             Object objeto = objetos.get(0);
@@ -227,13 +229,13 @@ public class Tabla {
      *
      */
     private List<Fila> generarFilas(List<Object> objetos) {
-        List<Fila> filas = new LinkedList<Fila>();
+        List<Fila> _filas = new LinkedList<>();
         if (objetos != null) {
-            for (Object obj : objetos) {
-                filas.add(new Fila(obj));
-            }
+            objetos.forEach((obj) -> {
+                _filas.add(new Fila(obj));
+            });
         }
-        return filas.size() > 0 ? filas : null;
+        return _filas.size() > 0 ? _filas : null;
     }
 
     /**
@@ -246,13 +248,13 @@ public class Tabla {
      * @see java.util.List
      */
     private List<Fila> generarFilas(String jsonObject) {
-        List<Fila> filas = new LinkedList<Fila>();
+        List<Fila> _filas = new LinkedList<>();
         JSONArray jsonarray = new JSONArray(jsonObject);
         for (int i = 0; i < jsonarray.length(); i++) {
             JSONObject jsonobject = jsonarray.getJSONObject(i);
-            filas.add(new Fila(jsonobject));
+            _filas.add(new Fila(jsonobject));
         }
-        return filas.size() > 0 ? filas : null;
+        return _filas.size() > 0 ? _filas : null;
     }
 
     /**

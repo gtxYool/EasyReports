@@ -5,37 +5,16 @@
  */
 package easyreport.excel;
 
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.hssf.usermodel.HSSFDataFormat;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.hssf.usermodel.HSSFPalette;
-import org.apache.poi.ss.usermodel.ClientAnchor;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.Picture;
-import org.apache.poi.ss.usermodel.Drawing;
-import org.apache.poi.hssf.util.HSSFColor;
 import java.time.format.DateTimeFormatter;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Font;
-import java.io.FileNotFoundException;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.*;
 import easyreport.Management.Rutas;
 import org.apache.poi.util.IOUtils;
-import java.io.FileOutputStream;
-import java.io.FileInputStream;
 import java.time.LocalDateTime;
-import java.io.InputStream;
-import java.io.IOException;
-import java.awt.Desktop;
-import java.io.File;
+import java.awt.*;
+import java.io.*;
 
 /**
  *
@@ -125,10 +104,10 @@ public class ExcelPlantilla {
             HSSFSheet sheet = wb
                     .createSheet(sheetName != null && !sheetName.isEmpty() ? sheetName : titulo.replace("/", "-"));
             sheet.setDisplayGridlines(false);
-            ExcelUtils.nuevaCelda(0, 0, "Transporte, Empaque y Almacenaje, S.A.", sheet, encabe);
-            ExcelUtils.CombinarCentrar(0, 1, 0, 6, sheet, false);
-            ExcelUtils.nuevaCelda(2, 1, titulo, sheet, tituloStyle);
-            ExcelUtils.CombinarCentrar(2, 2, 1, 9, sheet, false);
+            ExcelUtils.nuevaCelda(0, 3, "Transporte, Empaque y Almacenaje, S.A.", sheet, encabe);
+            ExcelUtils.CombinarCentrar(0, 1, 3, 11, sheet, false);
+            ExcelUtils.nuevaCelda(2, 3, titulo, sheet, tituloStyle);
+            ExcelUtils.CombinarCentrar(2, 2, 3, 11, sheet, false);
             ExcelUtils.nuevaCelda(3, 1, subTitulo, sheet, datCli);
             ExcelUtils.CombinarCentrar(3, 3, 1, 4, sheet, false);
             ExcelUtils.nuevaCelda(5, 1, "Fecha: " + this.fechora.replace(" ", "_Hora: "), sheet, datCli);
@@ -207,7 +186,6 @@ public class ExcelPlantilla {
     private void addImage(HSSFWorkbook workbook, Sheet sheet) {
         try {
             InputStream input = new FileInputStream(Rutas.getLogo());
-            //InputStream input = new FileInputStream("src/com/guatex/proyectobase/imagenes/Guatex2.jpg");
             byte[] imageInByte = IOUtils.toByteArray(input);
             int pictureIdx = workbook.addPicture(imageInByte, Workbook.PICTURE_TYPE_PNG);
             input.close();
@@ -215,13 +193,14 @@ public class ExcelPlantilla {
             CreationHelper helper = workbook.getCreationHelper();
             Drawing drawing = sheet.createDrawingPatriarch();
             ClientAnchor anchor = helper.createClientAnchor();
-            anchor.setCol1(10);
-            anchor.setCol2(15);
+            anchor.setCol1(0);
+            anchor.setCol2(3);
             anchor.setRow1(0);
             anchor.setRow2(4);
 
             Picture pict = drawing.createPicture(anchor, pictureIdx);
-            pict.resize(0.9, 1.6);
+            pict.setNoFill(true);
+            pict.resize(1, 1);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

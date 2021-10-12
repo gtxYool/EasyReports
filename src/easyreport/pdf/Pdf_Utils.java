@@ -1,27 +1,21 @@
 package easyreport.pdf;
 
-import com.itextpdf.text.BadElementException;
 import java.time.format.DateTimeFormatter;
+import easyreport.utils.ImageConverter;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.Chunk;
+import com.itextpdf.text.pdf.PdfPCell;
 import java.time.LocalDateTime;
 import com.itextpdf.text.Image;
-import com.itextpdf.text.Font;
 import java.text.NumberFormat;
-import java.util.ArrayList;
+import com.itextpdf.text.Font;
 import java.io.IOException;
-import java.awt.Desktop;
+import java.util.ArrayList;
+import com.itextpdf.text.*;
 import java.util.Arrays;
 import java.util.List;
 import java.io.File;
+import java.awt.*;
 
 /**
  *
@@ -121,6 +115,7 @@ public class Pdf_Utils {
         }
         return table;
     }
+
     /**
      * Crea una tabla sin bordes
      *
@@ -134,13 +129,13 @@ public class Pdf_Utils {
         PdfPTable table = new PdfPTable(col);
         table.setWidthPercentage(porcentaje);
         table.setSpacingAfter(15f);
-        for(PdfPTable g : datos) {
+        for (PdfPTable g : datos) {
             table.addCell(g);
             System.out.println("agregando...");
         }
         return table;
     }
-    
+
     /**
      * Crea un nuevo parrafo
      *
@@ -162,6 +157,22 @@ public class Pdf_Utils {
      */
     public Image getImage(String logoPath, Document document) throws BadElementException, IOException, Exception {
         Image newImage = Image.getInstance(logoPath);
+        newImage.scalePercent(getScaler(document, newImage));
+        return newImage;
+    }
+
+    /**
+     *
+     * @param document documento al que se agregará
+     * @return Image the imagen
+     * @throws BadElementException error con la ruta o la imagen
+     * @throws IOException error con la ruta o la imagen
+     * @throws Exception error al escalar la imagen
+     */
+    public Image getImageFromB64(Document document) throws BadElementException, IOException, Exception {
+        ImageConverter imgc = new ImageConverter();
+        byte[] data = imgc.b64ToIMAGEFile(imgc.getLOGOGUATEX());
+        Image newImage = Image.getInstance(data);
         newImage.scalePercent(getScaler(document, newImage));
         return newImage;
     }
@@ -196,6 +207,5 @@ public class Pdf_Utils {
             ex.printStackTrace();
             return false;
         }
-
     }
 }

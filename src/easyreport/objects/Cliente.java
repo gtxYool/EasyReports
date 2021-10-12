@@ -6,7 +6,8 @@
 package easyreport.objects;
 
 /**
- * 
+ * Se creo porque los reportes requerian imprimir informacion de los clientes
+ *
  * @author DYOOL
  */
 public class Cliente {

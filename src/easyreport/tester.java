@@ -7,10 +7,10 @@ package easyreport;
 
 import easyreport.pdf.Style_Templates.OneTblStyle_ReportPDF;
 import easyreport.excel.Style_Templates.Table_ExcelReport;
-import easyreport.pdf.*;
-import easyreport.objects.Cliente;
 
 /**
+ * Main creado para realizar pruebas de funcionalidad (aun no sabia usar JUNIT
+ * no me juzguen xdd)
  *
  * @author AHERNANDEZ
  */
@@ -39,8 +39,7 @@ public class tester {
             OneTblStyle_ReportPDF tr = new OneTblStyle_ReportPDF("C:\\TEMPORAL\\Testter", "ResumenAUT");
             tr.create(pdfTbl1);
             tr.AbrirArchivo();
-            
-            
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -141,5 +140,7 @@ public class tester {
                 + "]";
     }
 
-    public static String getJSONPrueba() {return "";}
+    public static String getJSONPrueba() {
+        return "";
+    }
 }

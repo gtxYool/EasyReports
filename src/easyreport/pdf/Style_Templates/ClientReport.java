@@ -5,23 +5,15 @@
  */
 package easyreport.pdf.Style_Templates;
 
-import com.itextpdf.text.BadElementException;
-import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.FontFactory;
 import java.io.FileNotFoundException;
-import com.itextpdf.text.Paragraph;
 import easyreport.Management.Rutas;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Element;
+import easyreport.objects.Cliente;
 import java.io.FileOutputStream;
 import easyreport.pdf.Plantilla;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Image;
 import easyreport.TableReport;
-import easyreport.objects.*;
 import java.io.IOException;
+import com.itextpdf.text.*;
 import java.io.File;
 
 /**

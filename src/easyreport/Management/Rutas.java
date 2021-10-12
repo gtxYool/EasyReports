@@ -5,10 +5,12 @@
  */
 package easyreport.Management;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 /**
+ * Contiene la ruta de la imagen para colocar el logo a los reportes y para
+ * grabar los reportes
  *
  * @author DYOOL
  */
@@ -41,6 +43,7 @@ public class Rutas {
 
     /**
      * Devuelve la ruta de acceso para el documento
+     *
      * @param PATH carpeta donde se va a guardar el archivo
      * @param nombreArchivo nombre del archivo
      * @return Ruta donde se guardo el documento creado

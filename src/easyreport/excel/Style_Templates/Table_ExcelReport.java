@@ -5,19 +5,17 @@
  */
 package easyreport.excel.Style_Templates;
 
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.ss.usermodel.CellStyle;
 import easyreport.objects.EncabezadoColumna;
-import org.apache.poi.ss.usermodel.Sheet;
 import easyreport.excel.ExcelPlantilla;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.*;
 import easyreport.excel.ExcelUtils;
 import easyreport.objects.Fila;
+import java.math.RoundingMode;
 import easyreport.TableReport;
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -76,7 +74,7 @@ public class Table_ExcelReport extends ExcelPlantilla {
             String titulo = report.getTitulo();
             String subTitulo = report.getSubTitulo();
             String descripcion = report.getDescripcion();
-            Sheet sheet = CreateSheet(workbook, titulo, subTitulo, descripcion);
+            Sheet sheet = CreateSheet(workbook, titulo.isEmpty() ? "Hoja" : titulo, subTitulo, descripcion);
             System.out.println("llevo " + workbook.getNumberOfSheets());
             if (sheet != null) {
                 Row r = sheet.createRow(numInicio++);
@@ -140,10 +138,9 @@ public class Table_ExcelReport extends ExcelPlantilla {
                             String value = fila.findValue(name);
                             if (reporte.getOperaciones() != null && columna.isOperar()) {
                                 try {
-                                    Double d = Double.valueOf(value);
-                                    ExcelUtils.nuevaCelda(row, colIni + colCount, d, hoja, getStyle4Operation(columna));
-                                } catch (Exception e) {
-                                    System.out.println("Valor: |" + value + "| <-- este no es un número wee no mames... ");
+                                    BigDecimal d = Redondear(value);
+                                    ExcelUtils.nuevaCelda(row, colIni + colCount, d.doubleValue(), hoja, getStyle4Operation(columna));
+                                } catch (NumberFormatException e) {
                                     ExcelUtils.nuevaCelda(row, colIni + colCount, value, hoja, texto);
                                 }
                                 reporte.getOperaciones().add(name, fila.getToDouble(name));
@@ -165,11 +162,9 @@ public class Table_ExcelReport extends ExcelPlantilla {
                         if (ec.isOperar()) {
                             String valor = reporte.getOperaciones().getValor(ec.getAtributoName());
                             try {
-                                Double d = Double.valueOf(valor);
-                                System.out.println("valor es " + valor);
-                                ExcelUtils.nuevaCelda(row, colIni + colCount, d, hoja, getStyle4Total(ec));
+                                BigDecimal d = Redondear(valor);
+                                ExcelUtils.nuevaCelda(row, colIni + colCount, d.doubleValue(), hoja, getStyle4Total(ec));
                             } catch (Exception e) {
-                                System.out.println("Valor: |" + valor + "| <-- este no es un número wee no mames... ");
                                 ExcelUtils.nuevaCelda(row, colIni + colCount, valor, hoja, total);
                             }
                         } else if (colCount != 0) {
@@ -383,4 +378,9 @@ public class Table_ExcelReport extends ExcelPlantilla {
         setDefault_descripcionStyle(descripcionStyle);
     }
 
+    public BigDecimal Redondear(String val) {
+        BigDecimal big = new BigDecimal(val);
+        big = big.setScale(2, RoundingMode.HALF_UP);
+        return big;
+    }
 }

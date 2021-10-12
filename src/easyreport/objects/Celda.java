@@ -8,6 +8,8 @@ package easyreport.objects;
 import java.lang.reflect.Field;
 
 /**
+ * Cada atributo en un objeto se transforma en un objeto Celda que contiene su
+ * nombre y valor
  *
  * @author DylanYool
  * @since 7 de septiembre, 2020.

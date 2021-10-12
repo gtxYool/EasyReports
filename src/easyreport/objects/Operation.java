@@ -11,12 +11,15 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * Se utiliza para almacenar el nombre de un atributo a operar (de momento solo
+ * se puede sumar) dicho listado se recorre al momento de crear reportes para
+ * agregar formato y realizar las operaciones
  *
  * @author DYOOL
  */
-public class Operation {
+public final class Operation {
 
-    private List<pair> campos = new LinkedList<pair>();
+    private final List<pair> campos = new LinkedList<>();
     private boolean suma;
 
     public Operation() {
@@ -101,9 +104,9 @@ public class Operation {
      * @param campos the campos to set
      */
     public void setCampos(List<String> campos) {
-        for (String g : campos) {
+        campos.forEach((g) -> {
             this.campos.add(new pair(g));
-        }
+        });
     }
 
     /**
@@ -114,7 +117,7 @@ public class Operation {
     }
 
     /**
-     *
+     * Clase auxiliar pair
      */
     private class pair {
 
